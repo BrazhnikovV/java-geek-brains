@@ -1,7 +1,5 @@
 package com.example.jcore;
 
-import java.lang.String;
-
 /**
  * Course - класс полоса препятствий
  *
