@@ -1,4 +1,6 @@
-package com.example.jcore;
+package com.example.jcore.lesson_1;
+
+import java.lang.String;
 
 /**
  * Course - класс полоса препятствий
@@ -33,11 +35,11 @@ public class Course {
      */
     public void doIt ( Team team ) {
 
-        String[] players = team.getPlayers();
+        IMember[] players = team.getPlayers();
 
         for ( int i = 0; i < players.length; i++ ) {
             for ( int j = 0; j < this.obstacles.length; j++ ) {
-                team.passAnObstacle( players[i], this.obstacles[j] );
+                team.passAnObstacle( players[i].getName(), this.obstacles[j] );
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.jcore;
+package com.example.jcore.lesson_1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class Team {
      *  @access private
      *  @var array players
      */
-    private String[] players;
+    private IMember[] players = new IMember[4];
 
     /**
      *  @access private
@@ -38,18 +38,22 @@ public class Team {
      * @param players - массив участников команды
      * @return undefined
      */
-    public Team( String name, String[] players ) {
+    public Team( String name, IMember ... players ) throws ArrayIndexOutOfBoundsException {
 
+        if ( players.length > 4 ) {
+            throw new ArrayIndexOutOfBoundsException( "Не больше четырех участников" );
+        }
         this.name = name;
         this.players = players;
     }
+
 
     /**
      * getPlayers - получить массив игроков команды
      *
      * @return array
      */
-    public String[] getPlayers() {
+    public IMember[] getPlayers() {
 
         return this.players;
     }
@@ -61,8 +65,11 @@ public class Team {
      */
     public void printPlayersMainInfo () {
 
+        System.out.println( "Участники соревнований:" );
+        System.out.println( "=======================" );
+
         for ( int i = 0; i < this.players.length; i++ ) {
-            System.out.println( this.players[i] );
+            System.out.println( this.players[i].getName() );
         }
     }
 
@@ -76,6 +83,10 @@ public class Team {
     public void printPlayersCourseInfo () {
 
         Object[] history_array = this.history.toArray();
+
+        System.out.println( "=============================" );
+        System.out.println( "Результат прохождения полосы:" );
+        System.out.println( "=============================" );
 
         for( Object action : history_array ){
             System.out.println( action );
