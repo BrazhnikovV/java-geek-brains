@@ -14,13 +14,13 @@ public class ArrayWorker {
      *  @access private
      *  @var integer size
      */
-    private static final int size = 100000/*00*/;
+    private static final int size = 10/*00*/;
 
     /**
      *  @access private
      *  @var integer h
      */
-    private final int h = size / 2;
+    private static final int h = size / 2;
 
     /**
      *  @access private
@@ -43,8 +43,8 @@ public class ArrayWorker {
     public static void main(String[] args) {
         ArrayWorker arr_worker = new ArrayWorker();
 
-        arr_worker.firstGeneralMethod();
-        arr_worker.secondGeneralMethod();
+        //arr_worker.firstGeneralMethod();
+        new Thread(() -> arr_worker.secondGeneralMethod()).start();
     }
 
     /**
@@ -80,17 +80,21 @@ public class ArrayWorker {
         first_part_arr  = splitArrayTwoParts( main_arr, 1 );
         second_part_arr = splitArrayTwoParts( main_arr, 2 );
 
-        // присваиваем новые значения полученным массивам в два потока
-        new Thread(() -> ArrayWorker.newValueForArrayElements(
-                first_part_arr, h, "first" )
-        ).start();
+        synchronized ( first_part_arr ) {
+            // присваиваем новые значения полученным массивам в два потока
+            ArrayWorker.newValueForArrayElements( first_part_arr, h, "first" );
 
-        new Thread(() -> ArrayWorker.newValueForArrayElements(
-                second_part_arr, h, "second" )
-        ).start();
+            synchronized ( second_part_arr ) {
+                ArrayWorker.newValueForArrayElements( second_part_arr, h, "second" );
 
-        // склеиваем массив из двух частей
-        joinArrayTwoParts();
+                // склеиваем массив из двух частей
+                joinArrayTwoParts();
+
+                for ( int i = 0; i < size; i++ ) {
+                    System.out.println( main_arr[i] );
+                }
+            }
+        }
 
         // засекаем окончание времени выполнения
         notifyExecutionTime();
@@ -182,7 +186,7 @@ public class ArrayWorker {
      * @return array
      *
      */
-    private synchronized void  joinArrayTwoParts () {
+    private static void joinArrayTwoParts () {
 
         System.arraycopy( first_part_arr, 0, main_arr, 0, h );
         System.arraycopy( second_part_arr,0, main_arr, h, h );
