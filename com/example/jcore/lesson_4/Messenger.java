@@ -45,7 +45,6 @@ public class Messenger extends JFrame {
      */
     private static String all_messages = "";
 
-
     /**
      * constructor
      *
