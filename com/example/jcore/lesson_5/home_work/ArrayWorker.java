@@ -90,8 +90,12 @@ public class ArrayWorker {
                 // склеиваем массив из двух частей
                 joinArrayTwoParts();
 
-                for ( int i = 0; i < size; i++ ) {
-                    System.out.println( main_arr[i] );
+                for ( int i = 0; i < h; i++ ) {
+                    System.out.println( first_part_arr[i] );
+                }
+
+                for ( int i = 0; i < h; i++ ) {
+                    System.out.println( second_part_arr[i] );
                 }
             }
         }
