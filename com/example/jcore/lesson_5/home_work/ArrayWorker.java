@@ -48,17 +48,22 @@ public class ArrayWorker {
         // засекаем начало время выполнения
         notifyExecutionTime();
 
-
+        // разбиваем массив на две части
         float[] main_arr = fillArray( createArray() );
         float[] first_part_arr = splitArrayTwoParts( main_arr, 1 );
         float[] second_part_arr = splitArrayTwoParts( main_arr, 2 );
-
 
         System.out.println( first_part_arr.length );
         System.out.println( first_part_arr[first_part_arr.length - 1] );
 
         System.out.println( second_part_arr.length );
         System.out.println( second_part_arr[second_part_arr.length - 1] );
+
+        // склеиваем маиисв из двух частей
+        float[] new_main_arr = joinArrayTwoParts( first_part_arr, second_part_arr );
+
+        System.out.println( new_main_arr.length );
+        System.out.println( new_main_arr[new_main_arr.length - 1] );
 
         // засекаем окончание времени выполнения
         notifyExecutionTime();
@@ -131,13 +136,31 @@ public class ArrayWorker {
         float[] half_arr = new float[h];
 
         if ( number_part == 1 ) {
-            System.arraycopy( arr, 0, half_arr, 0, arr.length / 2 );
+            System.arraycopy( arr, 0, half_arr, 0, h );
             return half_arr;
         }
         if ( number_part == 2 ) {
-            System.arraycopy( arr, arr.length / 2, half_arr, 0, arr.length / 2 );
+            System.arraycopy( arr, h / 2, half_arr, 0, h );
             return half_arr;
         }
+
+        return half_arr;
+    }
+
+    /**
+     * joinArrayTwoParts - склеить массив из двух частей
+     *
+     * @param first_part_array - первая половина массива
+     * @param second_part_array - вторая половина массива
+     * @return array
+     *
+     */
+    private float[] joinArrayTwoParts ( float[] first_part_array, float[] second_part_array ) {
+
+        float[] half_arr = new float[size];
+
+        System.arraycopy( first_part_array, 0, half_arr, 0, h );
+        System.arraycopy( second_part_array,0, half_arr, h, h );
 
         return half_arr;
     }
