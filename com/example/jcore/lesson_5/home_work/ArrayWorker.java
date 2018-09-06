@@ -14,13 +14,38 @@ public class ArrayWorker {
      *  @access private
      *  @var integer size
      */
-    private final int size = 1000000/*0*/;
+    private static final int size = 100000/*00*/;
 
     /**
      *  @access private
      *  @var integer h
      */
     private final int h = size / 2;
+
+    /**
+     *  @access private
+     *  @var array main_arr
+     */
+    private static float[] main_arr;
+
+    /**
+     *  @access private
+     *  @var array first_part_arr
+     */
+    private static float[] first_part_arr;
+
+    /**
+     *  @access private
+     *  @var array second_part_arr
+     */
+    private static float[] second_part_arr;
+
+    public static void main(String[] args) {
+        ArrayWorker arr_worker = new ArrayWorker();
+
+        arr_worker.firstGeneralMethod();
+        arr_worker.secondGeneralMethod();
+    }
 
     /**
      * firstGeneralMethod - первый основной метод домашнего задания
@@ -31,8 +56,10 @@ public class ArrayWorker {
         // засекаем начало время выполнения
         notifyExecutionTime();
 
-        float[] arr = newValueForArrayElements (
-            fillArray( createArray() )
+        newValueForArrayElements (
+            fillArray( createArray() ),
+            size,
+            "main"
         );
 
         // засекаем окончание времени выполнения
@@ -49,21 +76,21 @@ public class ArrayWorker {
         notifyExecutionTime();
 
         // разбиваем массив на две части
-        float[] main_arr = fillArray( createArray() );
-        float[] first_part_arr = splitArrayTwoParts( main_arr, 1 );
-        float[] second_part_arr = splitArrayTwoParts( main_arr, 2 );
+        main_arr = fillArray( createArray() );
+        first_part_arr  = splitArrayTwoParts( main_arr, 1 );
+        second_part_arr = splitArrayTwoParts( main_arr, 2 );
 
-        System.out.println( first_part_arr.length );
-        System.out.println( first_part_arr[first_part_arr.length - 1] );
+        // присваиваем новые значения полученным массивам в два потока
+        new Thread(() -> ArrayWorker.newValueForArrayElements(
+                first_part_arr, h, "first" )
+        ).start();
 
-        System.out.println( second_part_arr.length );
-        System.out.println( second_part_arr[second_part_arr.length - 1] );
+        new Thread(() -> ArrayWorker.newValueForArrayElements(
+                second_part_arr, h, "second" )
+        ).start();
 
-        // склеиваем маиисв из двух частей
-        float[] new_main_arr = joinArrayTwoParts( first_part_arr, second_part_arr );
-
-        System.out.println( new_main_arr.length );
-        System.out.println( new_main_arr[new_main_arr.length - 1] );
+        // склеиваем массив из двух частей
+        joinArrayTwoParts();
 
         // засекаем окончание времени выполнения
         notifyExecutionTime();
@@ -112,15 +139,17 @@ public class ArrayWorker {
      * Math​ . cos​ ( ​ 0.2f ​ + i ​ / ​ 5 ​ ) ​ * Math​ . ​ cos​ ( ​ 0.4f​ ​ + ​ i ​ / ​ ​ 2 ​ ))
      *
      * @param arr - длинный массив
-     * @return array
+     * @param size_arr - длинна массив
      */
-    private float[] newValueForArrayElements ( float[] arr ) {
+    private static synchronized void newValueForArrayElements ( float[] arr, int size_arr, String type ) {
 
-        for ( int i = 0; i < size; i++ ) {
+        for ( int i = 0; i < size_arr; i++ ) {
             arr[i] = ( float ) ( arr[i] * Math.sin( 0.2f + i / 5 ) * Math.cos( 0.2f + i / 5 ) * Math.cos( 0.4f + i / 2 ) );
         }
 
-        return arr;
+        if ( type == "main" ) { main_arr = arr; }
+        if ( type == "first" ) { first_part_arr = arr; }
+        if ( type == "second" ) { second_part_arr = arr; }
     }
 
     /**
@@ -140,7 +169,7 @@ public class ArrayWorker {
             return half_arr;
         }
         if ( number_part == 2 ) {
-            System.arraycopy( arr, h / 2, half_arr, 0, h );
+            System.arraycopy( arr, h, half_arr, 0, h );
             return half_arr;
         }
 
@@ -150,18 +179,12 @@ public class ArrayWorker {
     /**
      * joinArrayTwoParts - склеить массив из двух частей
      *
-     * @param first_part_array - первая половина массива
-     * @param second_part_array - вторая половина массива
      * @return array
      *
      */
-    private float[] joinArrayTwoParts ( float[] first_part_array, float[] second_part_array ) {
+    private synchronized void  joinArrayTwoParts () {
 
-        float[] half_arr = new float[size];
-
-        System.arraycopy( first_part_array, 0, half_arr, 0, h );
-        System.arraycopy( second_part_array,0, half_arr, h, h );
-
-        return half_arr;
+        System.arraycopy( first_part_arr, 0, main_arr, 0, h );
+        System.arraycopy( second_part_arr,0, main_arr, h, h );
     }
 }
