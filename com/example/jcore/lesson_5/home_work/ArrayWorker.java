@@ -14,53 +14,44 @@ public class ArrayWorker {
      *  @access private
      *  @var integer size
      */
-    private static final int size = 10/*00*/;
+    private static final int SIZE = 10/*00*/;
 
     /**
      *  @access private
      *  @var integer h
      */
-    private static final int h = size / 2;
+    private static final int HALF = SIZE / 2;
 
     /**
      *  @access private
      *  @var array main_arr
      */
-    private static float[] main_arr;
+    private static float[] main_arr = new float[SIZE];;
 
     /**
-     *  @access private
-     *  @var array first_part_arr
+     * main -
+     * @param args -
      */
-    private static float[] first_part_arr;
-
-    /**
-     *  @access private
-     *  @var array second_part_arr
-     */
-    private static float[] second_part_arr;
-
     public static void main(String[] args) {
         ArrayWorker arr_worker = new ArrayWorker();
 
         //arr_worker.firstGeneralMethod();
-        new Thread(() -> arr_worker.secondGeneralMethod()).start();
+        arr_worker.secondGeneralMethod();
     }
 
     /**
      * firstGeneralMethod - первый основной метод домашнего задания
-     *
      */
     public void firstGeneralMethod () {
 
         // засекаем начало время выполнения
         notifyExecutionTime();
 
-        newValueForArrayElements (
-            fillArray( createArray() ),
-            size,
-            "main"
-        );
+        main_arr = fillArray( createArray() );
+
+        for ( int i = 0; i < main_arr.length; i++ ) {
+            main_arr[i] = newValueForArrayElements( i, main_arr[i] );
+        }
 
         // засекаем окончание времени выполнения
         notifyExecutionTime();
@@ -72,32 +63,50 @@ public class ArrayWorker {
      */
     public void secondGeneralMethod () {
 
+        float[] a1 = new float[HALF];
+        float[] a2 = new float[HALF];
+
         // засекаем начало время выполнения
         notifyExecutionTime();
 
-        // разбиваем массив на две части
+        // заполняем главный массив
         main_arr = fillArray( createArray() );
-        first_part_arr  = splitArrayTwoParts( main_arr, 1 );
-        second_part_arr = splitArrayTwoParts( main_arr, 2 );
 
-        synchronized ( first_part_arr ) {
-            // присваиваем новые значения полученным массивам в два потока
-            ArrayWorker.newValueForArrayElements( first_part_arr, h, "first" );
+        // разбиваем массив на две части
+        a1 = splitArrayTwoParts( main_arr, 1 );
+        a2 = splitArrayTwoParts( main_arr, 2 );
 
-            synchronized ( second_part_arr ) {
-                ArrayWorker.newValueForArrayElements( second_part_arr, h, "second" );
-
-                // склеиваем массив из двух частей
-                joinArrayTwoParts();
-
-                for ( int i = 0; i < h; i++ ) {
-                    System.out.println( first_part_arr[i] );
-                }
-
-                for ( int i = 0; i < h; i++ ) {
-                    System.out.println( second_part_arr[i] );
-                }
+        // присваиваем новые значения полученным массивам в два потока
+        Thread thread_first = new Thread(() -> {
+            for ( int i = 0; i < a1.length; i++ ) {
+                a1[i] = newValueForArrayElements( i, a1[i] );
             }
+            System.arraycopy( a1, 0, main_arr, 0, HALF );
+        });
+
+        Thread thread_second = new Thread(() -> {
+            for ( int i = 0; i < a2.length; i++ ) {
+                a2[i] = newValueForArrayElements( i, a2[i] );
+            }
+            System.arraycopy( a2,0, main_arr, HALF, HALF );
+        });
+
+        // запускаем потоки на выполнение
+        thread_first.start();
+        thread_second.start();
+
+        // отлавливаем ошибки выполнения потоков и сообщаем основному потоку
+        // о том, что необходимо дождаться окончания выполнения созданных дпоплнительно потоков
+        try {
+            thread_first.join();
+            thread_second.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        for ( int i = 0; i < SIZE; i++ ) {
+            System.out.println( main_arr[i] );
         }
 
         // засекаем окончание времени выполнения
@@ -111,7 +120,7 @@ public class ArrayWorker {
      */
     private float[] createArray () {
 
-        float[] arr = new float[size];
+        float[] arr = new float[SIZE];
 
         return arr;
     }
@@ -124,7 +133,7 @@ public class ArrayWorker {
      */
     private float[] fillArray ( float[] arr ) {
 
-        for ( int i = 0; i < size; i++ ) {
+        for ( int i = 0; i < SIZE; i++ ) {
             arr[i] = 1;
         }
 
@@ -146,18 +155,12 @@ public class ArrayWorker {
      * ( ​ float​ )(​ arr​ [ ​ i ​ ] ​ * ​ Math​ . ​ sin​ ( ​ 0.2f ​ + i ​ / ​ 5 ​ ) ​ * ​
      * Math​ . cos​ ( ​ 0.2f ​ + i ​ / ​ 5 ​ ) ​ * Math​ . ​ cos​ ( ​ 0.4f​ ​ + ​ i ​ / ​ ​ 2 ​ ))
      *
-     * @param arr - длинный массив
-     * @param size_arr - длинна массив
+     * @param i -
+     * @param val -
+     * @return array
      */
-    private static synchronized void newValueForArrayElements ( float[] arr, int size_arr, String type ) {
-
-        for ( int i = 0; i < size_arr; i++ ) {
-            arr[i] = ( float ) ( arr[i] * Math.sin( 0.2f + i / 5 ) * Math.cos( 0.2f + i / 5 ) * Math.cos( 0.4f + i / 2 ) );
-        }
-
-        if ( type == "main" ) { main_arr = arr; }
-        if ( type == "first" ) { first_part_arr = arr; }
-        if ( type == "second" ) { second_part_arr = arr; }
+    private static float newValueForArrayElements ( int i, float val ) {
+        return ( float ) ( val * Math.sin( 0.2f + i / 5 ) * Math.cos( 0.2f + i / 5 ) * Math.cos( 0.4f + i / 2 ) );
     }
 
     /**
@@ -170,29 +173,17 @@ public class ArrayWorker {
      */
     private float[] splitArrayTwoParts ( float[] arr, int number_part ) {
 
-        float[] half_arr = new float[h];
+        float[] half_arr = new float[HALF];
 
         if ( number_part == 1 ) {
-            System.arraycopy( arr, 0, half_arr, 0, h );
+            System.arraycopy( arr, 0, half_arr, 0, HALF );
             return half_arr;
         }
         if ( number_part == 2 ) {
-            System.arraycopy( arr, h, half_arr, 0, h );
+            System.arraycopy( arr, HALF, half_arr, 0, HALF );
             return half_arr;
         }
 
         return half_arr;
-    }
-
-    /**
-     * joinArrayTwoParts - склеить массив из двух частей
-     *
-     * @return array
-     *
-     */
-    private static void joinArrayTwoParts () {
-
-        System.arraycopy( first_part_arr, 0, main_arr, 0, h );
-        System.arraycopy( second_part_arr,0, main_arr, h, h );
     }
 }
