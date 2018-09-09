@@ -33,16 +33,14 @@ public class ArrayWorker {
      * @param args -
      */
     public static void main(String[] args) {
-        ArrayWorker arr_worker = new ArrayWorker();
-
-        //arr_worker.firstGeneralMethod();
-        arr_worker.secondGeneralMethod();
+        //firstGeneralMethod();
+        secondGeneralMethod();
     }
 
     /**
      * firstGeneralMethod - первый основной метод домашнего задания
      */
-    public void firstGeneralMethod () {
+    public static void firstGeneralMethod () {
 
         // засекаем начало время выполнения
         notifyExecutionTime();
@@ -61,7 +59,7 @@ public class ArrayWorker {
      * secondGeneralMethod - второй основной метод домашнего задания
      *
      */
-    public void secondGeneralMethod () {
+    public static void secondGeneralMethod () {
 
         float[] a1 = new float[HALF];
         float[] a2 = new float[HALF];
@@ -118,7 +116,7 @@ public class ArrayWorker {
      *
      * @return array
      */
-    private float[] createArray () {
+    private static float[] createArray () {
 
         float[] arr = new float[SIZE];
 
@@ -131,7 +129,7 @@ public class ArrayWorker {
      * @param arr - длинный массив
      * @return array
      */
-    private float[] fillArray ( float[] arr ) {
+    private static float[] fillArray ( float[] arr ) {
 
         for ( int i = 0; i < SIZE; i++ ) {
             arr[i] = 1;
@@ -144,7 +142,7 @@ public class ArrayWorker {
      * notifyExecutionTime - засечь время выполнения
      *
      */
-    private void notifyExecutionTime () {
+    private static void notifyExecutionTime () {
         // !!! Необходимо выводить разницу
         System.out.println( System.currentTimeMillis() );
     }
@@ -171,7 +169,7 @@ public class ArrayWorker {
      * @return array
      *
      */
-    private float[] splitArrayTwoParts ( float[] arr, int number_part ) {
+    private static float[] splitArrayTwoParts ( float[] arr, int number_part ) {
 
         float[] half_arr = new float[HALF];
 
