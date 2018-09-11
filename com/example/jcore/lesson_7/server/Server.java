@@ -1,4 +1,4 @@
-package com.example.jcore.lesson_7;
+package com.example.jcore.lesson_7.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,7 +8,7 @@ import java.net.Socket;
  * Server -
  *
  * @version 1.0.1
- * @package com.example.jcore.lesson_7.home_work
+ * @package com.example.jcore.lesson_7.server
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
@@ -41,7 +41,11 @@ public class Server {
         }
     }
 
-    public static void main(String[] args) {
+    /**
+     * main -
+     * @param args -
+     */
+    public static void main( String[] args ) {
         Server server = new Server();
         server.start();
     }
@@ -70,7 +74,7 @@ public class Server {
         while ( true ) {
             try {
                 Socket client_socket = server.accept();
-                // ClientHandler clientHandler = new ClientHandler(clientSocket, this);
+                ClientHandler clientHandler = new ClientHandler( client_socket, this );
             }
             catch ( IOException e ) {
                 e.printStackTrace();
