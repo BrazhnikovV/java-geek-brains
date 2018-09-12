@@ -87,7 +87,6 @@ public class ClientController implements IController {
                         }
 
                         messenger.insertMessage( str );
-
                     }
                 }
             }
@@ -97,7 +96,6 @@ public class ClientController implements IController {
 
     @Override
     public void sendMessage( String msg ) {
-        System.out.println( "ClientController => sendMessage" );
         out.println( msg );
     }
 

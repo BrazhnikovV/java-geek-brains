@@ -85,7 +85,6 @@ public class ClientHandler {
      * @param msg - текст сообщения
      */
     public void sendMessage( String msg ) {
-        System.out.println( "ClientHandler => sendMessage" );
         pw.println( msg );
     }
 }

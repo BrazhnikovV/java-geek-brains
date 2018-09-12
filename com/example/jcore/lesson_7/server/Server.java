@@ -80,7 +80,6 @@ public class Server {
      * @param msg - текст сообщения
      */
     public void sendBroadcastMessage( String msg ) {
-        System.out.println( "Server => sendBroadcastMessage" );
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
