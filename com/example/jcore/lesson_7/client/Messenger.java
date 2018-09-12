@@ -3,10 +3,7 @@ package com.example.jcore.lesson_7.client;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class Messenger extends JFrame {
 
@@ -88,7 +85,7 @@ public class Messenger extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 String message = text_field.getText();
-                insertMessage( message );
+                //insertMessage( message );
                 controller.sendMessage( message );
             }
         });
@@ -110,6 +107,15 @@ public class Messenger extends JFrame {
             }
         });
 
+        // подписываемся на события закрытия окна
+        addWindowListener( new WindowAdapter() {
+            @Override
+            public void windowClosing( WindowEvent e ) {
+                super.windowClosing( e );
+                controller.closeConnection();
+            }
+        });
+
         // Добавляем панель к окну
         add( panel );
         setVisible( true );
@@ -121,7 +127,7 @@ public class Messenger extends JFrame {
      *
      * @param text - текст сообщения
      */
-    private void insertMessage ( String text )  {
+    public void insertMessage ( String text )  {
         text_field.setText( "" );
         text_area.setText( all_messages += text + "\n" );
     }

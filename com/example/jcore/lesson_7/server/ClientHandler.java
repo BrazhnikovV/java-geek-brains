@@ -62,9 +62,14 @@ public class ClientHandler {
             new Thread(() -> {
                 while ( socket.isConnected() ) {
                     String s = sc.nextLine();
-                    //sendMessage( s );
-                    if (s != null && !s.isEmpty())
-                        server.sendBroadcastMessage(this.name + " : " + s);
+
+                    if ( s != null && s.equals( "/exit" ) ) {
+                        server.unsubscribe(this );
+                    }
+
+                    if ( s != null && !s.isEmpty() ) {
+                        server.sendBroadcastMessage(this.name + " : " + s );
+                    }
                 }
             }).start();
         }

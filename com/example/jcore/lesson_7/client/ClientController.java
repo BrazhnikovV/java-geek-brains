@@ -80,9 +80,14 @@ public class ClientController implements IController {
                 while ( true ) {
                     if ( in.hasNext() ) {
 
-                        String w = in.nextLine();
+                        String str = in.nextLine();
 
-                        if ( w.startsWith( "end session" ) ) break;
+                        if ( str.startsWith( "end session" ) ) {
+                            break;
+                        }
+
+                        messenger.insertMessage( str );
+
                     }
                 }
             }
@@ -92,17 +97,18 @@ public class ClientController implements IController {
 
     @Override
     public void sendMessage( String msg ) {
+        System.out.println( "ClientController => sendMessage" );
         out.println( msg );
     }
 
     @Override
     public void closeConnection() {
         try {
-            sendMessage("/exit");
+            sendMessage("/exit" );
             sock.close();
             out.close();
             in.close();
         }
-        catch (IOException exc) {}
+        catch ( IOException exc ) {}
     }
 }

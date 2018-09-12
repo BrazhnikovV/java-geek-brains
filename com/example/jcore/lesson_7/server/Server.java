@@ -64,10 +64,14 @@ public class Server {
      * @param client_handler -
      */
     public void subscribe( ClientHandler client_handler ) {
-        System.out.println( client_handler.name + ": подключен!" );
         client_list.add( client_handler );
-        //String msg = "Клиент подключился";
-        //sendBroadcastMessage(msg);
+        sendBroadcastMessage( client_handler.name + ": подключен!" );
+    }
+
+    public void unsubscribe(ClientHandler client_handler) {
+        String msg = "Клиент " + client_handler.name + " отключился";
+        sendBroadcastMessage( msg );
+        client_list.remove( client_handler );
     }
 
     /**
