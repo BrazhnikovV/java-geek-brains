@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * ClientHandler -
@@ -14,6 +15,12 @@ import java.util.Scanner;
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
 public class ClientHandler {
+
+    /**
+     *  @access public
+     *  @var String name
+     */
+    public String name;
 
     /**
      *  @access private
@@ -36,6 +43,7 @@ public class ClientHandler {
     /**
      * constructor
      *
+     * @access public
      * @param socket -
      * @param server -
      */
@@ -47,9 +55,11 @@ public class ClientHandler {
             sc = new Scanner( socket.getInputStream() );
             pw = new PrintWriter( socket.getOutputStream(), true );
 
-            new Thread(() -> {
-                System.out.println( "Клиент подключен!" );
+            // Присваиваем имя клиенту и подписываемся на сервере
+            this.name = UUID.randomUUID().toString();
+            server.subscribe(this );
 
+            new Thread(() -> {
                 while ( socket.isConnected() ) {
                     String s = sc.nextLine();
                     sendMessage( s );
@@ -64,6 +74,7 @@ public class ClientHandler {
     /**
      * sendMessage - отправить сообщение
      *
+     * @access private
      * @param msg - текст сообщения
      */
     private void sendMessage( String msg ) {

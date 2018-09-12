@@ -28,22 +28,22 @@ public class ClientList {
     }
 
     /**
-     * addClient - добавить клиента
+     * add - добавить клиента
      *
      * @access public
      * @param  client_handler
      */
-    public void addClient( ClientHandler client_handler ) {
+    public void add( ClientHandler client_handler ) {
         clients.add( client_handler );
     }
 
     /**
-     * removeClient - удалить клиента
+     * remove - удалить клиента
      *
      * @access public
      * @param  client_handler
      */
-    public void removeClient( ClientHandler client_handler ) {
+    public void remove( ClientHandler client_handler ) {
         clients.remove( client_handler );
     }
 }

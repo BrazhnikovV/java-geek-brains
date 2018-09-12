@@ -27,16 +27,23 @@ public class Server {
     private ServerSocket server;
 
     /**
+     *  @access private
+     *  @var ClientList client_list
+     */
+    private ClientList client_list;
+
+    /**
      * constructor
      */
     public Server() {
 
         try {
-            server = new ServerSocket( SERVER_PORT );
-            System.out.println("Сервер запущен, ожидаем подключения...");
+            server      = new ServerSocket( SERVER_PORT );
+            client_list = new ClientList();
+            System.out.println( "Сервер запущен, ожидаем подключения..." );
         }
-        catch (IOException e) {
-            System.out.println("Ошибка инициализации сервера");
+        catch ( IOException e ) {
+            System.out.println( "Ошибка инициализации сервера" );
             close();
         }
     }
@@ -48,6 +55,18 @@ public class Server {
     public static void main( String[] args ) {
         Server server = new Server();
         server.start();
+    }
+
+    /**
+     * subscribe -
+     * @access public
+     * @param client_handler -
+     */
+    public void subscribe( ClientHandler client_handler ) {
+        System.out.println( client_handler.name + ": подключен!" );
+        client_list.add( client_handler );
+        //String msg = "Клиент подключился";
+        //sendBroadcastMessage(msg);
     }
 
     /**
