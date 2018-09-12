@@ -46,4 +46,13 @@ public class ClientList {
     public void remove( ClientHandler client_handler ) {
         clients.remove( client_handler );
     }
+
+    /**
+     * get - получить список клиентов
+     *
+     * @access public
+     */
+    public List<ClientHandler> get() {
+        return clients;
+    }
 }

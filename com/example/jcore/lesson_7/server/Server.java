@@ -3,6 +3,7 @@ package com.example.jcore.lesson_7.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 /**
  * Server -
@@ -67,6 +68,21 @@ public class Server {
         client_list.add( client_handler );
         //String msg = "Клиент подключился";
         //sendBroadcastMessage(msg);
+    }
+
+    /**
+     * sendBroadcastMessage - реализация широкополосного оповещения клиентов
+     * @access public
+     * @param msg - текст сообщения
+     */
+    public void sendBroadcastMessage( String msg ) {
+        System.out.println( "Server => sendBroadcastMessage" );
+        // получаем список клиентов для обхода в цикле
+        List<ClientHandler> inner_cl_list = client_list.get();
+
+        for ( ClientHandler client : inner_cl_list ) {
+            client.sendMessage( msg );
+        }
     }
 
     /**

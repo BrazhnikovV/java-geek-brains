@@ -13,7 +13,7 @@ import java.util.Scanner;
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
-public class ClientController {
+public class ClientController implements IController {
 
     /**
      *  @access private
@@ -46,6 +46,12 @@ public class ClientController {
     private PrintWriter out;
 
     /**
+     *  @access private
+     *  @var Messenger messenger
+     */
+    private Messenger messenger;
+
+    /**
      * constructor
      *
      */
@@ -63,6 +69,7 @@ public class ClientController {
             sock = new Socket( SERVER_ADDR, SERVER_PORT );
             in   = new Scanner( sock.getInputStream() );
             out  = new PrintWriter( sock.getOutputStream(), true );
+            messenger = new Messenger( this );
         }
         catch ( IOException e ) {
             e.printStackTrace();
@@ -81,5 +88,21 @@ public class ClientController {
             }
             catch ( Exception e ) {}
         }).start();
+    }
+
+    @Override
+    public void sendMessage( String msg ) {
+        out.println( msg );
+    }
+
+    @Override
+    public void closeConnection() {
+        try {
+            sendMessage("/exit");
+            sock.close();
+            out.close();
+            in.close();
+        }
+        catch (IOException exc) {}
     }
 }

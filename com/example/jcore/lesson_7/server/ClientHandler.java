@@ -62,7 +62,9 @@ public class ClientHandler {
             new Thread(() -> {
                 while ( socket.isConnected() ) {
                     String s = sc.nextLine();
-                    sendMessage( s );
+                    //sendMessage( s );
+                    if (s != null && !s.isEmpty())
+                        server.sendBroadcastMessage(this.name + " : " + s);
                 }
             }).start();
         }
@@ -74,10 +76,11 @@ public class ClientHandler {
     /**
      * sendMessage - отправить сообщение
      *
-     * @access private
+     * @access public
      * @param msg - текст сообщения
      */
-    private void sendMessage( String msg ) {
-        pw.println(msg);
+    public void sendMessage( String msg ) {
+        System.out.println( "ClientHandler => sendMessage" );
+        pw.println( msg );
     }
 }
