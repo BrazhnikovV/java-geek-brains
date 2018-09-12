@@ -3,7 +3,7 @@ package com.example.jcore.lesson_7;
 import com.example.jcore.lesson_7.client.ClientController;
 
 /**
- * MainClass -
+ * MainClass - запускает контроллер клиента
  *
  * @version 1.0.1
  * @package com.example.jcore.lesson_7.home_work

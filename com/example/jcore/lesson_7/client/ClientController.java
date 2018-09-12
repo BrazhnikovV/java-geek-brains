@@ -53,6 +53,11 @@ public class ClientController {
         initConnection();
     }
 
+    /**
+     * initConnection
+     *
+     * @access private
+     */
     private void initConnection() {
         try {
             sock = new Socket( SERVER_ADDR, SERVER_PORT );
