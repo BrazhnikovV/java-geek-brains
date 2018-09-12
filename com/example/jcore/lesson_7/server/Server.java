@@ -65,26 +65,29 @@ public class Server {
      */
     public void subscribe( ClientHandler client_handler ) {
         client_list.add( client_handler );
-        sendBroadcastMessage( client_handler.name + ": подключен!" );
+        sendBroadcastMessage( client_handler.name, client_handler.name + ": подключен!" );
     }
 
     public void unsubscribe(ClientHandler client_handler) {
         String msg = "Клиент " + client_handler.name + " отключился";
-        sendBroadcastMessage( msg );
+        sendBroadcastMessage( client_handler.name, msg );
         client_list.remove( client_handler );
     }
 
     /**
      * sendBroadcastMessage - реализация широкополосного оповещения клиентов
      * @access public
+     * @param name - имя
      * @param msg - текст сообщения
      */
-    public void sendBroadcastMessage( String msg ) {
+    public void sendBroadcastMessage( String name, String msg ) {
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
         for ( ClientHandler client : inner_cl_list ) {
-            client.sendMessage( msg );
+            if ( name != client.name ) {
+                client.sendMessage( msg );
+            }
         }
     }
 

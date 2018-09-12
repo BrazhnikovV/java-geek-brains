@@ -68,7 +68,7 @@ public class ClientHandler {
                     }
 
                     if ( s != null && !s.isEmpty() ) {
-                        server.sendBroadcastMessage(this.name + " : " + s );
+                        server.sendBroadcastMessage(this.name, this.name + " : " + s );
                     }
                 }
             }).start();
