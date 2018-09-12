@@ -85,13 +85,12 @@ public class Messenger extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 String message = text_field.getText();
-                //insertMessage( message );
                 controller.sendMessage( message );
             }
         });
 
         // подписываемся на события нажатия кнопки Enter
-        text_field.addKeyListener(new KeyAdapter() {
+        text_field.addKeyListener( new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
@@ -102,7 +101,7 @@ public class Messenger extends JFrame {
 
                 if ( key_code == 10 ) {
                     String message = text_field.getText();
-                    insertMessage( message );
+                    controller.sendMessage( message );
                 }
             }
         });
