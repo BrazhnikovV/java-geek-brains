@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.List;
 
 /**
- * Server -
+ * Server - класс реализующий сервер
  *
  * @version 1.0.1
  * @package com.example.jcore.lesson_7.server
@@ -86,6 +86,12 @@ public class Server {
         String msg = "Клиент " + client_handler.name + " отключился";
         sendBroadcastMessage( client_handler.name, msg );
         client_list.remove( client_handler );
+
+        // получаем список клиентов для обхода в цикле
+        List<ClientHandler> inner_cl_list = client_list.get();
+        if ( inner_cl_list.size() == 0 ) {
+            close();
+        }
     }
 
     /**
@@ -103,25 +109,21 @@ public class Server {
      * @param msg - текст сообщения
      */
     public void sendBroadcastMessage( String name, String msg ) {
-        System.out.println( "Server => sendBroadcastMessage" );
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
         for ( ClientHandler client : inner_cl_list ) {
-            //if ( name != client.name ) {
-                client.sendMessage( msg );
-            //}
+            client.sendMessage( msg );
         }
     }
 
     /**
      * sendPrivateMessage - реализация личного сообщения для клиента
      * @access public
-     * @param name - имя
+     * @param name - имя клиента
      * @param msg - текст сообщения
      */
     public void sendPrivateMessage( String name, String msg ) {
-        System.out.println( "Server => sendPrivateMessage" );
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 

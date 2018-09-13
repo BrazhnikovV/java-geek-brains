@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.UUID;
 
 /**
- * ClientHandler -
+ * ClientHandler - класс обработчик клиентских подключений и обработки сообщений
  *
  * @version 1.0.1
  * @package com.example.jcore.lesson_7.server
@@ -44,8 +43,8 @@ public class ClientHandler {
      * constructor
      *
      * @access public
-     * @param socket -
-     * @param server -
+     * @param socket - сокет подлючения
+     * @param server - серверный сокет
      */
     public ClientHandler( Socket socket, Server server ) {
 
@@ -62,14 +61,15 @@ public class ClientHandler {
 
                 // цикл получения пользовательских сообщений
                 while ( socket.isConnected() ) {
-                    System.out.println( "ClientHandler => while ( socket.isConnected()" );
+
                     String s = sc.nextLine();
                     if ( s != null && s.equals( "/exit" ) ) {
                         server.unsubscribe(this );
                     }
                     // получение личных сообщений
                     else if ( s.startsWith( "/w" ) ) {
-                        // получаем параметры из текстового сообщения и выполняем проверки авторизации
+                        // получаем параметры из текстового сообщения и
+                        // выполняем проверки авторизации
                         String[] commands = s.split(" " );
                         if ( commands.length >= 2 ) {
                             String login = commands[1];
@@ -82,7 +82,6 @@ public class ClientHandler {
                     }
                     // получение общих сообщений
                     else if ( s != null && !s.isEmpty() ) {
-                        System.out.println( "ClientHandler => s != null && !s.isEmpty()" );
                         server.sendBroadcastMessage( this.name, this.name + " : " + s );
                     }
                     else {
@@ -98,10 +97,19 @@ public class ClientHandler {
     }
 
     /**
+     * sendMessage - отправить сообщение
+     *
+     * @access public
+     * @param msg - текст сообщения
+     */
+    public void sendMessage( String msg ) {
+        pw.println( msg );
+    }
+
+    /**
      * auth - авторизацию по текстовому сообщению: "/auth login1 pass1"
      */
     private void auth() {
-        System.out.println( "ClientHandler => auth" );
         while ( true ) {
 
             if ( !sc.hasNextLine() ) {
@@ -137,15 +145,5 @@ public class ClientHandler {
                 }
             }
         }
-    }
-
-    /**
-     * sendMessage - отправить сообщение
-     *
-     * @access public
-     * @param msg - текст сообщения
-     */
-    public void sendMessage( String msg ) {
-        pw.println( msg );
     }
 }

@@ -3,7 +3,7 @@ package com.example.jcore.lesson_7.server;
 import java.util.ArrayList;
 
 /**
- * BaseAuthService -
+ * BaseAuthService - базовый класс авторизации
  *
  * @version 1.0.1
  * @package com.example.jcore.lesson_7.server

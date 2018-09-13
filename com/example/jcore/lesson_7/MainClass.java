@@ -18,6 +18,8 @@ public class MainClass {
      */
     public static void main( String[] args ) {
 
+        // Запускаем контроллер клиента,
+        // он же инициализирует окно пользовательского интерфейса
         ClientController controller = new ClientController();
     }
 }
