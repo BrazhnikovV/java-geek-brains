@@ -1,7 +1,6 @@
 package com.example.jcore.lesson_7;
 
 import com.example.jcore.lesson_7.client.ClientController;
-import com.example.jcore.lesson_7.client.Messenger;
 
 /**
  * MainClass - запускает контроллер клиента

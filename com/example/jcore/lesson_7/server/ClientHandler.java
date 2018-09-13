@@ -55,26 +55,69 @@ public class ClientHandler {
             sc = new Scanner( socket.getInputStream() );
             pw = new PrintWriter( socket.getOutputStream(), true );
 
-            // Присваиваем имя клиенту и подписываемся на сервере
-            this.name = UUID.randomUUID().toString();
-            server.subscribe(this );
+            // выполняем авторизацию польлзователя
+            auth();
 
+            // цикл получения пользовательских сообщений
             new Thread(() -> {
                 while ( socket.isConnected() ) {
                     String s = sc.nextLine();
-
+                    System.out.println( "ClientHandler => Thread(() -> II" );
                     if ( s != null && s.equals( "/exit" ) ) {
                         server.unsubscribe(this );
                     }
 
                     if ( s != null && !s.isEmpty() ) {
-                        server.sendBroadcastMessage(this.name, this.name + " : " + s );
+                        System.out.println( "s != null && !s.isEmpty()" );
+                        server.sendBroadcastMessage( this.name, this.name + " : " + s );
                     }
+                    System.out.println( "Дальше" );
                 }
             }).start();
         }
         catch ( IOException e ) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * auth - Wait for command: "/auth login1 pass1"
+     */
+    private void auth() {
+        while ( true ) {
+
+            if ( !sc.hasNextLine() ) {
+                continue;
+            }
+
+            String s = sc.nextLine();
+            if ( s.startsWith( "/auth" ) ) {
+
+                // получаем параметры из текстового сообщения и выполняем проверки авторизации
+                String[] commands = s.split(" " );
+                if ( commands.length >= 3 ) {
+                    String login = commands[1];
+                    String password = commands[2];
+
+                    String name = server.getAuthService().getNickByLoginPass( login, password );
+
+                    if ( name == null ) {
+                        String msg = "Неверный логин или пароль";
+                        pw.println( msg );
+                    }
+                    else if ( name == this.name ) {
+                        String msg = "Учетная запись уже используется!";
+                        pw.println( msg );
+                    }
+                    else {
+                        this.name = name;
+                        String msg = "Auth ok!";
+                        pw.println( msg );
+                        server.subscribe(this );
+                        break;
+                    }
+                }
+            }
         }
     }
 

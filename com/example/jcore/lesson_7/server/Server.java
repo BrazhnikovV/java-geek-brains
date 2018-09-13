@@ -34,9 +34,17 @@ public class Server {
     private ClientList client_list;
 
     /**
+     *  @access private
+     *  @var AuthService auth_service
+     */
+    private IAuthService auth_service;
+
+    /**
      * constructor
      */
-    public Server() {
+    public Server( IAuthService auth_service ) {
+
+        this.auth_service = auth_service;
 
         try {
             server      = new ServerSocket( SERVER_PORT );
@@ -54,7 +62,8 @@ public class Server {
      * @param args -
      */
     public static void main( String[] args ) {
-        Server server = new Server();
+        IAuthService base_auth_service = new BaseAuthService();
+        Server server = new Server( base_auth_service );
         server.start();
     }
 
@@ -68,10 +77,23 @@ public class Server {
         sendBroadcastMessage( client_handler.name, client_handler.name + ": подключен!" );
     }
 
-    public void unsubscribe(ClientHandler client_handler) {
+    /**
+     * unsubscribe -
+     * @access public
+     * @param client_handler -
+     */
+    public void unsubscribe( ClientHandler client_handler ) {
         String msg = "Клиент " + client_handler.name + " отключился";
         sendBroadcastMessage( client_handler.name, msg );
         client_list.remove( client_handler );
+    }
+
+    /**
+     * getAuthService -
+     * @access public
+     */
+    public IAuthService getAuthService() {
+        return this.auth_service;
     }
 
     /**
@@ -85,9 +107,9 @@ public class Server {
         List<ClientHandler> inner_cl_list = client_list.get();
 
         for ( ClientHandler client : inner_cl_list ) {
-            if ( name != client.name ) {
+            //if ( name != client.name ) {
                 client.sendMessage( msg );
-            }
+            //}
         }
     }
 
