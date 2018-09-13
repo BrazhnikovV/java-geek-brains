@@ -103,6 +103,7 @@ public class Server {
      * @param msg - текст сообщения
      */
     public void sendBroadcastMessage( String name, String msg ) {
+        System.out.println( "Server => sendBroadcastMessage" );
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
@@ -110,6 +111,24 @@ public class Server {
             //if ( name != client.name ) {
                 client.sendMessage( msg );
             //}
+        }
+    }
+
+    /**
+     * sendPrivateMessage - реализация личного сообщения для клиента
+     * @access public
+     * @param name - имя
+     * @param msg - текст сообщения
+     */
+    public void sendPrivateMessage( String name, String msg ) {
+        System.out.println( "Server => sendPrivateMessage" );
+        // получаем список клиентов для обхода в цикле
+        List<ClientHandler> inner_cl_list = client_list.get();
+
+        for ( ClientHandler client : inner_cl_list ) {
+            if ( name.trim().equals( client.name.trim() ) ) {
+                client.sendMessage( msg );
+            }
         }
     }
 

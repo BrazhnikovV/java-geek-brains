@@ -55,23 +55,40 @@ public class ClientHandler {
             sc = new Scanner( socket.getInputStream() );
             pw = new PrintWriter( socket.getOutputStream(), true );
 
-            // выполняем авторизацию польлзователя
-            auth();
-
-            // цикл получения пользовательских сообщений
             new Thread(() -> {
+
+                // выполняем авторизацию польлзователя
+                auth();
+
+                // цикл получения пользовательских сообщений
                 while ( socket.isConnected() ) {
+                    System.out.println( "ClientHandler => while ( socket.isConnected()" );
                     String s = sc.nextLine();
-                    System.out.println( "ClientHandler => Thread(() -> II" );
                     if ( s != null && s.equals( "/exit" ) ) {
                         server.unsubscribe(this );
                     }
+                    // получение личных сообщений
+                    else if ( s.startsWith( "/w" ) ) {
+                        // получаем параметры из текстового сообщения и выполняем проверки авторизации
+                        String[] commands = s.split(" " );
+                        if ( commands.length >= 2 ) {
+                            String login = commands[1];
 
-                    if ( s != null && !s.isEmpty() ) {
-                        System.out.println( "s != null && !s.isEmpty()" );
+                            if ( login != null  && !login.isEmpty() ) {
+                                String msg = "Привет";
+                                server.sendPrivateMessage( login, msg );
+                            }
+                        }
+                    }
+                    // получение общих сообщений
+                    else if ( s != null && !s.isEmpty() ) {
+                        System.out.println( "ClientHandler => s != null && !s.isEmpty()" );
                         server.sendBroadcastMessage( this.name, this.name + " : " + s );
                     }
-                    System.out.println( "Дальше" );
+                    else {
+                        String msg = "Что-то пошло не так :((";
+                        server.sendPrivateMessage( this.name, msg );
+                    }
                 }
             }).start();
         }
@@ -81,9 +98,10 @@ public class ClientHandler {
     }
 
     /**
-     * auth - Wait for command: "/auth login1 pass1"
+     * auth - авторизацию по текстовому сообщению: "/auth login1 pass1"
      */
     private void auth() {
+        System.out.println( "ClientHandler => auth" );
         while ( true ) {
 
             if ( !sc.hasNextLine() ) {

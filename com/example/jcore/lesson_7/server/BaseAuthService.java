@@ -34,7 +34,7 @@ public class BaseAuthService implements IAuthService {
 
         for ( AuthEntry o : entries ) {
             if (o.getLogin().equals( login ) && o.getPass().equals( pass ) ) {
-                return o.getNick();
+                return o.getLogin();
             }
         }
 
