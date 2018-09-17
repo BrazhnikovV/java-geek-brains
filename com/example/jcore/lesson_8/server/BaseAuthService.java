@@ -30,7 +30,7 @@ public class BaseAuthService implements IAuthService {
     }
 
     @Override
-    public String getNickByLoginPass( String login, String pass ) {
+    public String getLoginByLoginPass( String login, String pass ) {
 
         for ( AuthEntry o : entries ) {
             if (o.getLogin().equals( login ) && o.getPass().equals( pass ) ) {

@@ -40,6 +40,12 @@ public class ClientHandler {
     private Scanner sc;
 
     /**
+     *  @access private
+     *  @var long last_action_time
+     */
+    private long last_action_time;
+
+    /**
      * constructor
      *
      * @access public
@@ -88,6 +94,9 @@ public class ClientHandler {
                         String msg = "Что-то пошло не так :((";
                         server.sendPrivateMessage( this.name, msg );
                     }
+                    // делаем пометку что пользователь производил
+                    // действие ( попытка авторизации )
+                    last_action_time = System.currentTimeMillis();
                 }
             }).start();
         }
@@ -119,13 +128,17 @@ public class ClientHandler {
             String s = sc.nextLine();
             if ( s.startsWith( "/auth" ) ) {
 
+                // делаем пометку что пользователь производил
+                // действие ( попытка авторизации )
+                last_action_time = System.currentTimeMillis();
+
                 // получаем параметры из текстового сообщения и выполняем проверки авторизации
                 String[] commands = s.split(" " );
                 if ( commands.length >= 3 ) {
                     String login = commands[1];
                     String password = commands[2];
 
-                    String name = server.getAuthService().getNickByLoginPass( login, password );
+                    String name = server.getAuthService().getLoginByLoginPass( login, password );
 
                     if ( name == null ) {
                         String msg = "Неверный логин или пароль";

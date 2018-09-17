@@ -12,7 +12,7 @@ public interface IAuthService {
 
     //void start();
 
-    String getNickByLoginPass(String login, String pass);
+    String getLoginByLoginPass(String login, String pass);
 
     //void stop();
 

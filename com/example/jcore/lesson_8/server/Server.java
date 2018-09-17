@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Server - класс реализующий сервер
@@ -164,5 +166,23 @@ public class Server {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * checkСlientssLoyalty - запускает реализацию setInterval
+     * для опроса клиентов на предмет их активности
+     *
+     * @access private
+     */
+    private void checkСlientssLoyalty() {
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run()
+            {
+                System.out.print( "Привет" );
+            }
+        };
+        timer.schedule(task, 0L ,1000L);
     }
 }
