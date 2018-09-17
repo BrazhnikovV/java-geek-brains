@@ -52,6 +52,7 @@ public class Server {
             server      = new ServerSocket( SERVER_PORT );
             client_list = new ClientList();
             System.out.println( "Сервер запущен, ожидаем подключения..." );
+            checkСlientssLoyalty();
         }
         catch ( IOException e ) {
             System.out.println( "Ошибка инициализации сервера" );
@@ -175,14 +176,25 @@ public class Server {
      * @access private
      */
     private void checkСlientssLoyalty() {
+        new Thread(() -> {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    // получаем список клиентов для обхода в цикле
+                    List<ClientHandler> inner_cl_list = client_list.get();
 
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run()
-            {
-                System.out.print( "Привет" );
-            }
-        };
-        timer.schedule(task, 0L ,1000L);
+                    for ( ClientHandler client : inner_cl_list ) {
+                        long time_act = client.getLastActionTime();
+                        long time_now = System.currentTimeMillis();
+                        long difference = time_now - time_act;
+
+                        if ( difference > 120000 ) {
+                            unsubscribe( client );
+                        }
+                    }
+                }
+            };
+            timer.schedule( task, 0L ,1000L );
+        }).start();
     }
 }

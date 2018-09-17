@@ -91,7 +91,7 @@ public class ClientHandler {
                         server.sendBroadcastMessage( this.name, this.name + " : " + s );
                     }
                     else {
-                        String msg = "Что-то пошло не так :((";
+                        String msg = "Что-то пошло не так :(";
                         server.sendPrivateMessage( this.name, msg );
                     }
                     // делаем пометку что пользователь производил
@@ -103,6 +103,15 @@ public class ClientHandler {
         catch ( IOException e ) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * getLastActionTime -
+     *
+     * @access public
+     */
+    public long getLastActionTime( ) {
+        return this.last_action_time;
     }
 
     /**
