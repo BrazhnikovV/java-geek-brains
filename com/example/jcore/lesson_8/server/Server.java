@@ -75,9 +75,10 @@ public class Server {
      * @access public
      * @param client_handler -
      */
-    public void subscribe( ClientHandler client_handler ) {
+    public synchronized void subscribe( ClientHandler client_handler ) {
         client_list.add( client_handler );
         sendBroadcastMessage( client_handler.name, client_handler.name + ": подключен!" );
+        broadcastClientsList();
     }
 
     /**
@@ -85,15 +86,16 @@ public class Server {
      * @access public
      * @param client_handler -
      */
-    public void unsubscribe( ClientHandler client_handler ) {
+    public synchronized void unsubscribe( ClientHandler client_handler ) {
         String msg = "Клиент " + client_handler.name + " отключился";
         sendBroadcastMessage( client_handler.name, msg );
         client_list.remove( client_handler );
+        broadcastClientsList();
 
-        // получаем список клиентов для обхода в цикле
+        // получаем список клиентов
         List<ClientHandler> inner_cl_list = client_list.get();
         if ( inner_cl_list.size() == 0 ) {
-            close();
+            //close();
         }
     }
 
@@ -111,7 +113,7 @@ public class Server {
      * @param name - имя
      * @param msg - текст сообщения
      */
-    public void sendBroadcastMessage( String name, String msg ) {
+    public synchronized void sendBroadcastMessage( String name, String msg ) {
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
@@ -121,12 +123,30 @@ public class Server {
     }
 
     /**
+     * broadcastClientsList -
+     * @access public
+     */
+    public synchronized void broadcastClientsList() {
+        // получаем список клиентов для обхода в цикле
+        List<ClientHandler> inner_cl_list = client_list.get();
+
+        String client_list = "/clients";
+        for ( ClientHandler client : inner_cl_list ) {
+            client_list += " " + client.name;
+        }
+
+        for ( ClientHandler client : inner_cl_list ) {
+            client.sendMessage( client_list );
+        }
+    }
+
+    /**
      * sendPrivateMessage - реализация личного сообщения для клиента
      * @access public
      * @param name - имя клиента
      * @param msg - текст сообщения
      */
-    public void sendPrivateMessage( String name, String msg ) {
+    public synchronized void sendPrivateMessage( String name, String msg ) {
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
@@ -149,6 +169,7 @@ public class Server {
         catch ( IOException e ) {
             e.printStackTrace();
         }
+        System.out.println( "Сервер остановлен." );
         System.exit(0 );
     }
 
@@ -175,7 +196,7 @@ public class Server {
      *
      * @access private
      */
-    private void checkСlientssLoyalty() {
+    private synchronized void checkСlientssLoyalty() {
         new Thread(() -> {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
