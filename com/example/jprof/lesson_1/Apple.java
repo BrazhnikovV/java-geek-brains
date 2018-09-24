@@ -11,18 +11,12 @@ package com.example.jprof.lesson_1;
 public class Apple extends Fruit {
 
     /**
-     *  @access private
-     *  @var string name
-     */
-    private int weight;
-
-    /**
      * constructor
      *
      * @param weight - вес фрукта
      * @return undefined
      */
     public Apple ( int weight ) {
-        this.weight = weight;
+        super( weight );
     }
 }

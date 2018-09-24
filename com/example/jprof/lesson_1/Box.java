@@ -11,13 +11,13 @@ import java.util.List;
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
-public class Box {
+public class Box<T extends Fruit> {
 
     /**
      *  @access private
-     *  @var ClientHandler fruits
+     *  @var T fruits
      */
-    private List<Fruit> fruits = new ArrayList<>();
+    private List<T> fruits = new ArrayList<>();
 
     /**
      * constructor
@@ -32,7 +32,7 @@ public class Box {
      * @param fruit - фрукт
      * @return undefined
      */
-    public void add ( Fruit fruit ) {
+    public void add ( T fruit ) {
         this.fruits.add( fruit );
     }
 
@@ -42,6 +42,13 @@ public class Box {
      * @return int
      */
     public int getWeight () {
-        return 1;
+
+        int sum = 0;
+
+        for ( int i = 0; i < this.fruits.size(); i++ ) {
+            sum += this.fruits.get( i ).getWeight();
+        }
+
+        return sum;
     }
 }
