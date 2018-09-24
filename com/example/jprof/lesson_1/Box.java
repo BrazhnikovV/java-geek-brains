@@ -35,7 +35,7 @@ public class Box<T extends Fruit> {
     public void add ( T fruit ) {
 
         if ( this.fruits.size() > 0 ) {
-            if ( !fruit.equals( this ) ) {
+            if ( this.fruits.get(0).getClass().getName() != fruit.getClass().getName() ) {
                 throw new Error();
             }
         }
@@ -59,10 +59,19 @@ public class Box<T extends Fruit> {
     }
 
     /**
+     * getFruits - получить фрукты в коробке
+     *
+     * @return List<T>
+     */
+    public List<T> getFruits () {
+        return this.fruits;
+    }
+
+    /**
      * compare - сравнить текущую коробку с
      * переданной в качестве аргумента
      *
-     * @return int
+     * @return boolean
      */
     public boolean compare ( Box box ) {
         if ( this.getWeight() == box.getWeight() ) {
@@ -71,5 +80,23 @@ public class Box<T extends Fruit> {
         else {
             return false;
         }
+    }
+
+    /**
+     * pepper - пересыпать фрукты в текущую
+     * коробку из переданной
+     *
+     * @param box - коробка которую необходимо пересыпать в текущую
+     * @return boolean
+     */
+    public boolean pepper ( Box box ) {
+        List<T> input_box = box.getFruits();
+
+        for ( int i = 0; i < input_box.size(); i++ ) {
+            this.add( input_box.get( i ) );
+            input_box.remove( i );
+        }
+
+        return true;
     }
 }
