@@ -1,7 +1,7 @@
 package com.example.jprof.lesson_1;
 
 /**
- * Apple -
+ * Apple - класс тип фрукта Яблоко
  *
  * @version 1.0.1
  * @package com.example.jprof.lesson_1

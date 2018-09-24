@@ -1,7 +1,7 @@
 package com.example.jprof.lesson_1;
 
 /**
- * Orange -
+ * Orange - класс тип фрукта Апельсин
  *
  * @version 1.0.1
  * @package com.example.jprof.lesson_1

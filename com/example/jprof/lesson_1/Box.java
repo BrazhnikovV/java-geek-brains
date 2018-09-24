@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Box -
+ * Box - класс коробка для хранения однотипных фруктов
  *
  * @version 1.0.1
  * @package com.example.jprof.lesson_1
@@ -73,7 +73,7 @@ public class Box<T extends Fruit> {
      *
      * @return boolean
      */
-    public boolean compare ( Box box ) {
+    public boolean compare ( Box<?> box ) {
         if ( this.getWeight() == box.getWeight() ) {
             return true;
         }
