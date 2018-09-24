@@ -33,6 +33,12 @@ public class Box<T extends Fruit> {
      * @return undefined
      */
     public void add ( T fruit ) {
+
+        if ( this.fruits.size() > 0 ) {
+            if ( !fruit.equals( this ) ) {
+                throw new Error();
+            }
+        }
         this.fruits.add( fruit );
     }
 
@@ -50,5 +56,20 @@ public class Box<T extends Fruit> {
         }
 
         return sum;
+    }
+
+    /**
+     * compare - сравнить текущую коробку с
+     * переданной в качестве аргумента
+     *
+     * @return int
+     */
+    public boolean compare ( Box box ) {
+        if ( this.getWeight() == box.getWeight() ) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
