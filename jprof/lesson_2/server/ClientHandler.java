@@ -72,11 +72,21 @@ public class ClientHandler {
                     if ( s != null && s.equals( "/exit" ) ) {
                         server.unsubscribe(this );
                     }
+                    // запрос на изменение логина
+                    else if ( s.startsWith( "/rename" ) ) {
+                        String[] commands = s.split( " " );
+                        if ( commands.length >= 2 ) {
+                            String new_login = commands[1];
+                            server.getAuthService().renameLogin( this.name, new_login );
+                            String msg = "Пользователь " + this.name + " сменил логин на " + new_login;
+                            server.sendBroadcastMessage( this.name, msg );
+                        }
+                    }
                     // получение личных сообщений
                     else if ( s.startsWith( "/w" ) ) {
                         // получаем параметры из текстового сообщения и
                         // выполняем проверки авторизации
-                        String[] commands = s.split(" " );
+                        String[] commands = s.split( " " );
                         if ( commands.length >= 2 ) {
                             String login = commands[1];
 

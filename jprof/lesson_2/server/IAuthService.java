@@ -13,6 +13,8 @@ public interface IAuthService {
     //void start();
 
     String getLoginByLoginPass(String login, String pass);
+    
+    int renameLogin( String old_login, String new_login );
 
     //void stop();
 

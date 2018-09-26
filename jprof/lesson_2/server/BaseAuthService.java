@@ -50,4 +50,21 @@ public class BaseAuthService implements IAuthService {
 
         return null;
     }
+    
+    @Override
+    public int renameLogin( String old_login, String new_login ) {
+        
+        String query = "UPDATE users SET name='" + new_login + "' WHERE name='" + old_login + "'";
+        
+        try {
+            int result = stmt.executeUpdate( query );
+            stmt.close();
+            return result;            
+        } 
+        catch ( SQLException e ) {
+            System.out.println( "Not found records" );
+        }
+        
+        return 0;
+    }
 }
