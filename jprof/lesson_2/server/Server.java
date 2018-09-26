@@ -120,9 +120,9 @@ public class Server {
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
-        for ( ClientHandler client : inner_cl_list ) {
+        inner_cl_list.forEach( ( client ) -> {
             client.sendMessage( msg );
-        }
+        });
     }
 
     /**
@@ -133,13 +133,14 @@ public class Server {
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
-        String client_list = "/clients";
-        for ( ClientHandler client : inner_cl_list ) {
-            client_list += " " + client.name;
-        }
+        String str_clients = "/clients";
+        
+        str_clients = inner_cl_list.stream()
+            .map( ( client ) -> " " + client.name )
+            .reduce( str_clients, String::concat );
 
         for ( ClientHandler client : inner_cl_list ) {
-            client.sendMessage( client_list );
+            client.sendMessage( str_clients );
         }
     }
 
@@ -153,11 +154,11 @@ public class Server {
         // получаем список клиентов для обхода в цикле
         List<ClientHandler> inner_cl_list = client_list.get();
 
-        for ( ClientHandler client : inner_cl_list ) {
-            if ( name.trim().equals( client.name.trim() ) ) {
+        inner_cl_list.stream()
+            .filter((client) -> ( name.trim().equals( client.name.trim() ) ))
+            .forEachOrdered(( client ) -> {
                 client.sendMessage( msg );
-            }
-        }
+            });
     }
 
     /**
@@ -170,7 +171,7 @@ public class Server {
             server.close();
         }
         catch ( IOException e ) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         System.out.println( "Сервер остановлен." );
         System.exit(0 );
@@ -188,7 +189,7 @@ public class Server {
                 ClientHandler clientHandler = new ClientHandler( client_socket, this );
             }
             catch ( IOException e ) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
@@ -203,19 +204,20 @@ public class Server {
         new Thread(() -> {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
+                
+                @Override
                 public void run() {
                     // получаем список клиентов для обхода в цикле
                     List<ClientHandler> inner_cl_list = client_list.get();
 
-                    for ( ClientHandler client : inner_cl_list ) {
+                    inner_cl_list.forEach(( client ) -> {
                         long time_act = client.getLastActionTime();
                         long time_now = System.currentTimeMillis();
                         long difference = time_now - time_act;
-
-                        if ( difference > 120000 ) {
+                        if (difference > 120000) {
                             unsubscribe( client );
                         }
-                    }
+                    });
                 }
             };
             timer.schedule( task, 0L ,1000L );
