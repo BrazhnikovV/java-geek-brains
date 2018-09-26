@@ -43,6 +43,8 @@ public class Server {
 
     /**
      * constructor
+     * 
+     * @param auth_service
      */
     public Server( IAuthService auth_service ) {
 
@@ -94,7 +96,7 @@ public class Server {
 
         // получаем список клиентов
         List<ClientHandler> inner_cl_list = client_list.get();
-        if ( inner_cl_list.size() == 0 ) {
+        if ( inner_cl_list.isEmpty() ) {
             //close();
         }
     }
@@ -102,6 +104,7 @@ public class Server {
     /**
      * getAuthService -
      * @access public
+     * @return IAuthService
      */
     public IAuthService getAuthService() {
         return this.auth_service;

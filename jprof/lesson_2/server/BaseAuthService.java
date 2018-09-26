@@ -3,7 +3,6 @@ package jprof.lesson_2.server;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import jprof.lesson_2.db.DBConnection;
 
 /**
@@ -20,7 +19,7 @@ public class BaseAuthService implements IAuthService {
      *  @access private
      *  @var String login
      */
-    private ArrayList<AuthEntry> entries = new ArrayList<>();
+    private final Statement stmt;
 
     /**
      * constructor
@@ -29,32 +28,25 @@ public class BaseAuthService implements IAuthService {
 
         DBConnection db_connect = new DBConnection();
         db_connect.init();
-        Statement stmt = db_connect.getConnection();
-        
-        try ( ResultSet resultSet = stmt.executeQuery( "SELECT * FROM users" ) ) {
-
-            while ( resultSet.next() ) {
-                entries.add( new AuthEntry( 
-                        resultSet.getString(2),
-                        resultSet.getString(3), 
-                        resultSet.getString(4)
-                ));
-            }
-            stmt.close();
-        } 
-        catch ( SQLException e ) {
-            System.out.println( "Failed to get connection" );
-        }
+        stmt = db_connect.getConnection();                
     }
 
     @Override
     public String getLoginByLoginPass( String login, String pass ) {
 
-        for ( AuthEntry o : entries ) {
-            if (o.getLogin().equals( login ) && o.getPass().equals( pass ) ) {
-                return o.getLogin();
+        String query = "SELECT * FROM users WHERE name='"+login+"' AND pass='"+pass+"'";
+        
+        try ( ResultSet resultSet = stmt.executeQuery( query ) ) {
+
+            while ( resultSet.next() ) {
+                System.out.println( resultSet.getString(2) );
+                return resultSet.getString(2);
             }
-        }
+            stmt.close();
+        } 
+        catch ( SQLException e ) {
+            System.out.println( "Not found records" );
+        }        
 
         return null;
     }
