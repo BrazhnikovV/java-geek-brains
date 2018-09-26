@@ -2,7 +2,9 @@ package jprof.lesson_2.server;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import jprof.lesson_2.db.DBConnection;
 
 /**
  * BaseAuthService - базовый класс авторизации
@@ -18,17 +20,31 @@ public class BaseAuthService implements IAuthService {
      *  @access private
      *  @var String login
      */
-    private ArrayList<AuthEntry> entries;
+    private ArrayList<AuthEntry> entries = new ArrayList<>();
 
     /**
      * constructor
      */
     public BaseAuthService() {
 
-        entries = new ArrayList<>();
-        entries.add( new AuthEntry("Ivan", "pass1", "nickIvan" ) );
-        entries.add( new AuthEntry("Vasya","pass2", "nickVasya" ) );
-        entries.add( new AuthEntry("Petr", "pass3", "nickPetr" ) );
+        DBConnection db_connect = new DBConnection();
+        db_connect.init();
+        Statement stmt = db_connect.getConnection();
+        
+        try ( ResultSet resultSet = stmt.executeQuery( "SELECT * FROM users" ) ) {
+
+            while ( resultSet.next() ) {
+                entries.add( new AuthEntry( 
+                        resultSet.getString(2),
+                        resultSet.getString(3), 
+                        resultSet.getString(4)
+                ));
+            }
+            stmt.close();
+        } 
+        catch ( SQLException e ) {
+            System.out.println( "Failed to get connection" );
+        }
     }
 
     @Override
@@ -39,18 +55,6 @@ public class BaseAuthService implements IAuthService {
                 return o.getLogin();
             }
         }
-        /*
-        try ( ResultSet resultSet = statement.executeQuery( "SELECT * FROM tbl_sources" ) ) {
-
-            while ( resultSet.next() ) {
-                System.out.println( resultSet.getObject(4) );
-            }
-            statement.close();
-        } 
-        catch ( SQLException e ) {
-            System.out.println( "Failed to get connection" );
-        }
-        */
 
         return null;
     }
