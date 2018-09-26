@@ -1,5 +1,7 @@
 package jprof.lesson_2.server;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -37,6 +39,18 @@ public class BaseAuthService implements IAuthService {
                 return o.getLogin();
             }
         }
+        /*
+        try ( ResultSet resultSet = statement.executeQuery( "SELECT * FROM tbl_sources" ) ) {
+
+            while ( resultSet.next() ) {
+                System.out.println( resultSet.getObject(4) );
+            }
+            statement.close();
+        } 
+        catch ( SQLException e ) {
+            System.out.println( "Failed to get connection" );
+        }
+        */
 
         return null;
     }
