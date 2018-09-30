@@ -1,4 +1,4 @@
-package jprof.lesson_2;
+package jprof.lesson_3;
 
 import jcore.lesson_8.client.ClientController;
 

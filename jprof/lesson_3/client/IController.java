@@ -1,4 +1,4 @@
-package jprof.lesson_2.client;
+package jprof.lesson_3.client;
 
 /**
  * IController - интерфейс для класса ClientController

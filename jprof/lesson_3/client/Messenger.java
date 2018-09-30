@@ -1,4 +1,4 @@
-package jprof.lesson_2.client;
+package jprof.lesson_3.client;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

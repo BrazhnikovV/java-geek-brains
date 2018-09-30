@@ -1,4 +1,4 @@
-package jprof.lesson_2.server;
+package jprof.lesson_3.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
