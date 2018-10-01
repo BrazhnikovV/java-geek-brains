@@ -122,7 +122,7 @@ public class Server {
 
     /**
      * sendBroadcastMessage - реализация широкополосного оповещения клиентов
-     * 
+     *
      * @access public
      * @param name - имя
      * @param msg - текст сообщения

@@ -2,6 +2,7 @@ package jprof.lesson_3.server;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,6 +66,20 @@ public class Logger {
      */
     public List<String> readLog () {
         this.readMessagesFormFile();
+
+        // конвертируем ArrayList в массив
+        String[] arrMessages = this.massagesList.toArray( new String[this.massagesList.size()] );
+
+        String[] localArray =  null;
+        if ( arrMessages.length < 10 ) {
+            localArray = this.copyPartArray( arrMessages, 10 - arrMessages.length );
+        }
+        else {
+            localArray = this.copyPartArray( arrMessages, ( arrMessages.length - 10 ) );
+        }
+
+        this.massagesList = new ArrayList( Arrays.asList( localArray ) );
+
         return this.massagesList;
     }
 
@@ -105,5 +120,26 @@ public class Logger {
         } catch ( IOException e ) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * copyPartArray - получить часть массива
+     *
+     * @access private
+     * @param  a -
+     * @param  start - индекс массива начиная с
+     *               которого отрезается часть исходного массива
+     * @return String[]
+     */
+    private String[] copyPartArray ( String[] a, int start ) {
+        if ( a == null ) {
+            return null;
+        }
+        if (start > a.length) {
+            return null;
+        }
+        String [] r = new String[a.length - start];
+        System.arraycopy(a, start, r, 0, a.length - start);
+        return r;
     }
 }
