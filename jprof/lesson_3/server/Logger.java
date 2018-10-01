@@ -1,6 +1,8 @@
 package jprof.lesson_3.server;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Logger - класс реализующий логирование приложения
@@ -25,26 +27,57 @@ public class Logger {
     private DataInputStream in = null;
 
     /**
+     *  @access private
+     *  @var List<String> massagesList
+     */
+    private List<String> massagesList = new ArrayList<>();
+
+    /**
+     *  @access private
+     *  @var String logName
+     */
+    private final String logName = "log.txt";
+
+    /**
      * constructor
      */
     public Logger () {
 
     }
 
-    public static void main(String[] args) {
-        //createFile();
-        //writeMessageToFile( "message" );
+    /**
+     * writeLog - клиенткая функция для записи в лог
+     *
+     * @access public
+     * @param msg -
+     * @return boolean
+     */
+    public boolean writeLog ( String msg ) {
+        this.writeMessageToFile( msg );
+        return true;
     }
 
     /**
-     * writeMessageToFile -
+     * readLog - клиентмкая функция чтения лога
+     *
+     * @access public
+     * @return List<String>
+     */
+    public List<String> readLog () {
+        this.readMessagesFormFile();
+        return this.massagesList;
+    }
+
+    /**
+     * writeMessageToFile - записать сообщение в лог файл
+     *
      * @access private
-     * @param msg -
+     * @param msg - текстовое сообщение
      * @return void
      */
     private void writeMessageToFile ( String msg ) {
         try {
-            out = new DataOutputStream( new FileOutputStream("log.txt" ) );
+            out = new DataOutputStream( new FileOutputStream( this.logName ) );
             out.writeUTF( msg + "\n" );
             out.close();
         } catch ( FileNotFoundException e ) {
@@ -55,11 +88,22 @@ public class Logger {
     }
 
     /**
-     * readMessagesFormFile -
+     * readMessagesFormFile - получить все сообщения из лог файла и сохранить их
+     *
      * @access private
      * @return
      */
-    private static void readMessagesFormFile() {
+    private void readMessagesFormFile() {
+        try {
+            in = new DataInputStream( new FileInputStream( this.logName ) );
 
+            while ( in.available() > 0 ) {
+                massagesList.add( in.readUTF() );
+            }
+        } catch ( FileNotFoundException e ) {
+            e.printStackTrace();
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
     }
 }
