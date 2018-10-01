@@ -31,15 +31,15 @@ public class Server {
 
     /**
      *  @access private
-     *  @var ClientList client_list
+     *  @var ClientList clientList
      */
-    private ClientList client_list;
+    private ClientList clientList;
 
     /**
      *  @access private
-     *  @var AuthService auth_service
+     *  @var AuthService authService
      */
-    private IAuthService auth_service;
+    private IAuthService authService;
 
     /**
      *  @access private
@@ -50,16 +50,16 @@ public class Server {
     /**
      * constructor
      */
-    public Server( IAuthService auth_service ) {
+    public Server( IAuthService authService ) {
 
         // инициализируем функционал логирования приложения
         this.logger = new Logger();
 
-        this.auth_service = auth_service;
+        this.authService = authService;
 
         try {
-            server      = new ServerSocket( SERVER_PORT );
-            client_list = new ClientList();
+            server     = new ServerSocket( SERVER_PORT );
+            clientList = new ClientList();
             System.out.println( "Сервер запущен, ожидаем подключения..." );
             checkСlientssLoyalty();
         }
@@ -74,60 +74,64 @@ public class Server {
      * @param args -
      */
     public static void main( String[] args ) {
-        IAuthService base_auth_service = new BaseAuthService();
-        Server server = new Server( base_auth_service );
+        IAuthService baseAuthService = new BaseAuthService();
+        Server server = new Server( baseAuthService );
         server.start();
     }
 
     /**
      * subscribe - подписать нового пользователя в чате
      * @access public
-     * @param client_handler -
+     * @param clientHandler -
      */
-    public synchronized void subscribe( ClientHandler client_handler ) {
-        client_list.add( client_handler );
-        sendBroadcastMessage( client_handler.name, client_handler.name + ": подключен!" );
+    public synchronized void subscribe( ClientHandler clientHandler ) {
+        clientList.add( clientHandler );
+        sendBroadcastMessage( clientHandler.name, clientHandler.name + ": подключен!" );
         broadcastClientsList();
-        sendPrivateMessage( client_handler.name, this.logger.readLog() );
+        sendPrivateMessage( clientHandler.name, this.logger.readLog() );
     }
 
     /**
      * unsubscribe - отписать отключившегося пользователя
+     *
      * @access public
-     * @param client_handler -
+     * @param clientHandler -
      */
-    public synchronized void unsubscribe( ClientHandler client_handler ) {
-        String msg = "Клиент " + client_handler.name + " отключился";
-        sendBroadcastMessage( client_handler.name, msg );
-        client_list.remove( client_handler );
+    public synchronized void unsubscribe( ClientHandler clientHandler ) {
+        String msg = "Клиент " + clientHandler.name + " отключился";
+        sendBroadcastMessage( clientHandler.name, msg );
+        clientList.remove( clientHandler );
         broadcastClientsList();
 
         // получаем список клиентов
-        List<ClientHandler> inner_cl_list = client_list.get();
-        if ( inner_cl_list.size() == 0 ) {
+        List<ClientHandler> localClientList = clientList.get();
+        if ( localClientList.size() == 0 ) {
             //close();
         }
     }
 
     /**
-     * getAuthService -
+     * getAuthService - получить объект для выполнения
+     * функционала авторизации пользователя
+     *
      * @access public
      */
     public IAuthService getAuthService() {
-        return this.auth_service;
+        return this.authService;
     }
 
     /**
      * sendBroadcastMessage - реализация широкополосного оповещения клиентов
+     * 
      * @access public
      * @param name - имя
      * @param msg - текст сообщения
      */
     public synchronized void sendBroadcastMessage( String name, String msg ) {
         // получаем список клиентов для обхода в цикле
-        List<ClientHandler> inner_cl_list = client_list.get();
+        List<ClientHandler> localClientList = clientList.get();
 
-        for ( ClientHandler client : inner_cl_list ) {
+        for ( ClientHandler client : localClientList ) {
             client.sendMessage( msg );
         }
 
@@ -135,34 +139,36 @@ public class Server {
     }
 
     /**
-     * broadcastClientsList -
+     * broadcastClientsList - отправить список клиентов всем пользователям
+     *
      * @access public
      */
     public synchronized void broadcastClientsList() {
         // получаем список клиентов для обхода в цикле
-        List<ClientHandler> inner_cl_list = client_list.get();
+        List<ClientHandler> localClientList = clientList.get();
 
-        String client_list = "/clients";
-        for ( ClientHandler client : inner_cl_list ) {
-            client_list += " " + client.name;
+        String clientList = "/clients";
+        for ( ClientHandler client : localClientList ) {
+            clientList += " " + client.name;
         }
 
-        for ( ClientHandler client : inner_cl_list ) {
-            client.sendMessage( client_list );
+        for ( ClientHandler client : localClientList ) {
+            client.sendMessage( clientList );
         }
     }
 
     /**
      * sendPrivateMessage - реализация личного сообщения для клиента
+     *
      * @access public
      * @param name - имя клиента
      * @param msg - текст сообщения
      */
     public synchronized void sendPrivateMessage( String name, String msg ) {
         // получаем список клиентов для обхода в цикле
-        List<ClientHandler> inner_cl_list = client_list.get();
+        List<ClientHandler> localClientList = clientList.get();
 
-        for ( ClientHandler client : inner_cl_list ) {
+        for ( ClientHandler client : localClientList ) {
             if ( name.trim().equals( client.name.trim() ) ) {
                 client.sendMessage( msg );
             }
@@ -170,16 +176,17 @@ public class Server {
     }
 
     /**
-     * sendPrivateMessage -
+     * sendPrivateMessage - отправить личное сообщение
+     *
      * @access public
      * @return List<String>
      */
     private void sendPrivateMessage( String name, List<String> messages ) {
 
         // получаем список клиентов для обхода в цикле
-        List<ClientHandler> inner_cl_list = client_list.get();
+        List<ClientHandler> localClientList = clientList.get();
 
-        for ( ClientHandler client : inner_cl_list ) {
+        for ( ClientHandler client : localClientList ) {
             if ( name.trim().equals( client.name.trim() ) ) {
                 for ( String msg : messages ) {
                     client.sendMessage( msg );
@@ -233,9 +240,9 @@ public class Server {
             TimerTask task = new TimerTask() {
                 public void run() {
                     // получаем список клиентов для обхода в цикле
-                    List<ClientHandler> inner_cl_list = client_list.get();
+                    List<ClientHandler> localClientList = clientList.get();
 
-                    for ( ClientHandler client : inner_cl_list ) {
+                    for ( ClientHandler client : localClientList ) {
                         long time_act = client.getLastActionTime();
                         long time_now = System.currentTimeMillis();
                         long difference = time_now - time_act;

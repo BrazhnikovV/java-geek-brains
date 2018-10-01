@@ -45,15 +45,15 @@ public class Messenger extends JFrame {
 
     /**
      *  @access private static
-     *  @var JTextField text_field
+     *  @var JTextField textField
      */
-    private static final JTextField text_field = new JTextField(35 );
+    private static final JTextField textField = new JTextField(35 );
 
     /**
      *  @access private static
-     *  @var String all_messages
+     *  @var String allMessages
      */
-    private static String all_messages = "";
+    private static String allMessages = "";
 
     /**
      * constructor
@@ -88,7 +88,7 @@ public class Messenger extends JFrame {
         );
 
         // Добавление элементов к панели
-        panel.add( text_field );
+        panel.add( textField );
         panel.add( scroll );
         panel.add( jbutton );
 
@@ -97,13 +97,13 @@ public class Messenger extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String message = text_field.getText();
+                String message = textField.getText();
                 controller.sendMessage( message );
             }
         });
 
         // подписываемся на события нажатия кнопки Enter
-        text_field.addKeyListener( new KeyAdapter() {
+        textField.addKeyListener( new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
@@ -113,7 +113,7 @@ public class Messenger extends JFrame {
                 Integer key_code = e.getKeyCode();
 
                 if ( key_code == 10 ) {
-                    String message = text_field.getText();
+                    String message = textField.getText();
                     controller.sendMessage( message );
                 }
             }
@@ -140,7 +140,7 @@ public class Messenger extends JFrame {
      * @param text - текст сообщения
      */
     public void insertMessage ( String text )  {
-        text_field.setText( "" );
-        textArea.setText( all_messages += text + "\n" );
+        textField.setText( "" );
+        textArea.setText( allMessages += text + "\n" );
     }
 }
