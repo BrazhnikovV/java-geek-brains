@@ -1,6 +1,6 @@
 package jprof.lesson_3;
 
-import jcore.lesson_8.client.ClientController;
+import jprof.lesson_3.client.ClientController;
 
 /**
  * MainClass - запускает контроллер клиента

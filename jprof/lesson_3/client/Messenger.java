@@ -15,15 +15,15 @@ public class Messenger extends JFrame {
 
     /**
      *  @access private static
-     *  @var integer window_width
+     *  @var integer windowWidth
      */
-    private static final int window_width = 400;
+    private static final int windowWidth = 400;
 
     /**
      *  @access private static
-     *  @var integer window_height
+     *  @var integer windowHeight
      */
-    private static final int window_height = 400;
+    private static final int windowHeight = 400;
 
     /**
      *  @access private static
@@ -33,9 +33,15 @@ public class Messenger extends JFrame {
 
     /**
      *  @access private static
-     *  @var JTextArea text_area
+     *  @var JTextArea textArea
      */
-    private static final JTextArea text_area = new JTextArea( 10, 35 );
+    private static final JTextArea textArea = new JTextArea( 10, 33 );
+
+    /**
+     *  @access private static
+     *  @var JScrollPane scroll
+     */
+    private static JScrollPane scroll = null;
 
     /**
      *  @access private static
@@ -60,7 +66,7 @@ public class Messenger extends JFrame {
         // подписываемся на событие клика по кнопки закрыть окна
         setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         // устанавливаем параметры формы
-        setSize( window_width, window_height );
+        setSize( windowWidth, windowHeight );
         setResizable( false );
 
         // Jpanel panel_top_buttons
@@ -70,15 +76,20 @@ public class Messenger extends JFrame {
         panel.setLayout( new FlowLayout() );
 
         // Создаем текстовую область для отображения переписки
-        text_area.setBorder( new LineBorder( Color.GRAY, 1 ) );
-        text_area.setEditable( false );
-        text_area.setLineWrap( true );
+        textArea.setBorder( new LineBorder( Color.GRAY, 1 ) );
+        textArea.setEditable( false );
+        textArea.setLineWrap( true );
 
-        //JScrollPane scroll = new JScrollPane( text_area, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS );
+        // добавляем горизонтальный скрол
+        scroll = new JScrollPane(
+            textArea,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
 
         // Добавление элементов к панели
         panel.add( text_field );
-        panel.add( text_area );
+        panel.add( scroll );
         panel.add( jbutton );
 
         // подписываемся на события клика по кнопке отправить
@@ -130,6 +141,6 @@ public class Messenger extends JFrame {
      */
     public void insertMessage ( String text )  {
         text_field.setText( "" );
-        text_area.setText( all_messages += text + "\n" );
+        textArea.setText( all_messages += text + "\n" );
     }
 }
