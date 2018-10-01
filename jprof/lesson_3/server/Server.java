@@ -42,9 +42,18 @@ public class Server {
     private IAuthService auth_service;
 
     /**
+     *  @access private
+     *  @var Logger logger
+     */
+    private Logger logger;
+
+    /**
      * constructor
      */
     public Server( IAuthService auth_service ) {
+
+        // инициализируем функционал логирования приложения
+        this.logger = new Logger();
 
         this.auth_service = auth_service;
 
@@ -71,7 +80,7 @@ public class Server {
     }
 
     /**
-     * subscribe -
+     * subscribe - подписать нового пользователя в чате
      * @access public
      * @param client_handler -
      */
@@ -79,10 +88,11 @@ public class Server {
         client_list.add( client_handler );
         sendBroadcastMessage( client_handler.name, client_handler.name + ": подключен!" );
         broadcastClientsList();
+        sendPrivateMessage( client_handler.name, this.logger.readLog() );
     }
 
     /**
-     * unsubscribe -
+     * unsubscribe - отписать отключившегося пользователя
      * @access public
      * @param client_handler -
      */
@@ -120,6 +130,8 @@ public class Server {
         for ( ClientHandler client : inner_cl_list ) {
             client.sendMessage( msg );
         }
+
+        this.logger.writeLog( msg );
     }
 
     /**
@@ -153,6 +165,25 @@ public class Server {
         for ( ClientHandler client : inner_cl_list ) {
             if ( name.trim().equals( client.name.trim() ) ) {
                 client.sendMessage( msg );
+            }
+        }
+    }
+
+    /**
+     * sendPrivateMessage -
+     * @access public
+     * @return List<String>
+     */
+    private void sendPrivateMessage( String name, List<String> messages ) {
+
+        // получаем список клиентов для обхода в цикле
+        List<ClientHandler> inner_cl_list = client_list.get();
+
+        for ( ClientHandler client : inner_cl_list ) {
+            if ( name.trim().equals( client.name.trim() ) ) {
+                for ( String msg : messages ) {
+                    client.sendMessage( msg );
+                }
             }
         }
     }

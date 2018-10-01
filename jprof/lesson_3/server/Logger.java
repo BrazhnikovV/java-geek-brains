@@ -77,7 +77,7 @@ public class Logger {
      */
     private void writeMessageToFile ( String msg ) {
         try {
-            out = new DataOutputStream( new FileOutputStream( this.logName ) );
+            out = new DataOutputStream( new FileOutputStream( this.logName, true ) );
             out.writeUTF( msg + "\n" );
             out.close();
         } catch ( FileNotFoundException e ) {

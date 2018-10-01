@@ -74,6 +74,8 @@ public class Messenger extends JFrame {
         text_area.setEditable( false );
         text_area.setLineWrap( true );
 
+        //JScrollPane scroll = new JScrollPane( text_area, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS );
+
         // Добавление элементов к панели
         panel.add( text_field );
         panel.add( text_area );
