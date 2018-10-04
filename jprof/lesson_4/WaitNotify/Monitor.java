@@ -1,4 +1,4 @@
-package jprof.lesson_4;
+package jprof.lesson_4.WaitNotify;
 
 public class Monitor {
 
