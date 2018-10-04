@@ -55,6 +55,12 @@ public class ClientHandler {
     private ExecutorService executor = Executors.newFixedThreadPool(10 );
 
     /**
+     *  @access private
+     *  @var Future<Integer> future
+     */
+    private Future<Integer> future;
+
+    /**
      * constructor
      *
      * @access public
@@ -69,7 +75,7 @@ public class ClientHandler {
             sc = new Scanner( socket.getInputStream() );
             pw = new PrintWriter( socket.getOutputStream(), true );
 
-            Future<Integer> future   = executor.submit(() -> {
+            this.future = executor.submit(() -> {
                 this.handler( socket, server );
                 return 1;
             });
@@ -92,6 +98,15 @@ public class ClientHandler {
     }
 
     /**
+     * getFuture - получить объект Future
+     *
+     * @access public
+     */
+    public Future<Integer> getFuture() {
+        return this.future;
+    }
+
+    /**
      * sendMessage - отправить сообщение
      *
      * @access public
@@ -103,6 +118,9 @@ public class ClientHandler {
 
     /**
      * handler -
+     *
+     * @param socket - сокет подлючения
+     * @param server - серверный сокет
      */
     private void handler( Socket socket, Server server ) {
         // выполняем авторизацию польлзователя
@@ -112,29 +130,30 @@ public class ClientHandler {
         while ( socket.isConnected() ) {
 
             String s = sc.nextLine();
-            if (s != null && s.equals("/exit")) {
-                server.unsubscribe(this);
+            if (s != null && s.equals( "/exit" )) {
+                server.unsubscribe(this );
             }
             // получение личных сообщений
-            else if (s.startsWith("/w")) {
+            else if (s.startsWith( "/w" )) {
                 // получаем параметры из текстового сообщения и
                 // выполняем проверки авторизации
-                String[] commands = s.split(" ");
-                if (commands.length >= 2) {
+                String[] commands = s.split(" " );
+                if ( commands.length >= 2 ) {
                     String login = commands[1];
 
-                    if (login != null && !login.isEmpty()) {
+                    if ( login != null && !login.isEmpty() ) {
                         String msg = "Привет";
-                        server.sendPrivateMessage(login, msg);
+                        server.sendPrivateMessage( login, msg );
                     }
                 }
             }
             // получение общих сообщений
-            else if (s != null && !s.isEmpty()) {
-                server.sendBroadcastMessage(this.name, this.name + " : " + s);
-            } else {
+            else if ( s != null && !s.isEmpty() ) {
+                server.sendBroadcastMessage( this.name, this.name + " : " + s );
+            }
+            else {
                 String msg = "Что-то пошло не так :(";
-                server.sendPrivateMessage(this.name, msg);
+                server.sendPrivateMessage( this.name, msg );
             }
             // делаем пометку что пользователь производил
             // действие ( попытка авторизации )

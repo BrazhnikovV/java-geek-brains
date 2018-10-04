@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Server - класс реализующий сервер
@@ -70,7 +71,7 @@ public class Server {
     }
 
     /**
-     * main -
+     * main - точка запуска сервера
      * @param args -
      */
     public static void main( String[] args ) {
