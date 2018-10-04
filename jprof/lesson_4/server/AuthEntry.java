@@ -4,7 +4,7 @@ package jprof.lesson_4.server;
  * AuthEntry -
  *
  * @version 1.0.1
- * @package com.example.jcore.lesson_7.server
+ * @package jprof.lesson_4.server
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
@@ -33,8 +33,8 @@ public class AuthEntry {
      */
     public AuthEntry( String login, String pass, String nick ) {
         this.login = login;
-        this.pass = pass;
-        this.nick = nick;
+        this.pass  = pass;
+        this.nick  = nick;
     }
 
     /**

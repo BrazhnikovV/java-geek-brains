@@ -10,7 +10,7 @@ import java.util.List;
  * MainClass - запускает контроллер клиента
  *
  * @version 1.0.1
- * @package com.example.jcore.lesson_7.home_work
+ * @package jprof.lesson_4
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
@@ -24,20 +24,6 @@ public class MainClass {
 
         // Запускаем контроллер клиента,
         // он же инициализирует окно пользовательского интерфейса
-        //ClientController controller = new ClientController();
-
-
-        Integer[] list = {12,31,31,2,1,2,1,21,2,1,3,21};
-
-        List<Integer> r =  new ArrayList( Arrays.asList( list ) );
-
-        int sum = r.stream().map(x -> {
-            return x * x;
-        }).reduce((x, y) -> {
-            System.out.println("x = " + x);
-            System.out.println("y = " + y);
-            return x + y;
-        }).get();
-        System.out.println(sum);
+        ClientController controller = new ClientController();
     }
 }

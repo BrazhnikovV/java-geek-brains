@@ -5,6 +5,15 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Messenger -
+ *
+ * @version 1.0.1
+ * @package jprof.lesson_4.client
+ * @author  Vasya Brazhnikov
+ * @copyright Copyright (c) 2018, Vasya Brazhnikov
+ */
+
 public class Messenger extends JFrame {
 
     /**

@@ -9,7 +9,7 @@ import java.util.List;
  * Logger - класс реализующий логирование приложения
  *
  * @version 1.0.1
- * @package jpof.lesson_3.server
+ * @package jpof.lesson_4.server
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */

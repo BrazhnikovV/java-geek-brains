@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * ClientHandler - класс обработчик клиентских подключений и обработки сообщений
  *
  * @version 1.0.1
- * @package com.example.jcore.lesson_7.server
+ * @package jprof.lesson_4.server
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
@@ -46,6 +49,12 @@ public class ClientHandler {
     private long last_action_time;
 
     /**
+     *  @access private
+     *  @var ExecutorService executor
+     */
+    private ExecutorService executor = Executors.newFixedThreadPool(10 );
+
+    /**
      * constructor
      *
      * @access public
@@ -60,45 +69,13 @@ public class ClientHandler {
             sc = new Scanner( socket.getInputStream() );
             pw = new PrintWriter( socket.getOutputStream(), true );
 
-            new Thread(() -> {
-
-                // выполняем авторизацию польлзователя
-                auth();
-
-                // цикл получения пользовательских сообщений
-                while ( socket.isConnected() ) {
-
-                    String s = sc.nextLine();
-                    if ( s != null && s.equals( "/exit" ) ) {
-                        server.unsubscribe(this );
-                    }
-                    // получение личных сообщений
-                    else if ( s.startsWith( "/w" ) ) {
-                        // получаем параметры из текстового сообщения и
-                        // выполняем проверки авторизации
-                        String[] commands = s.split(" " );
-                        if ( commands.length >= 2 ) {
-                            String login = commands[1];
-
-                            if ( login != null  && !login.isEmpty() ) {
-                                String msg = "Привет";
-                                server.sendPrivateMessage( login, msg );
-                            }
-                        }
-                    }
-                    // получение общих сообщений
-                    else if ( s != null && !s.isEmpty() ) {
-                        server.sendBroadcastMessage( this.name, this.name + " : " + s );
-                    }
-                    else {
-                        String msg = "Что-то пошло не так :(";
-                        server.sendPrivateMessage( this.name, msg );
-                    }
-                    // делаем пометку что пользователь производил
-                    // действие ( попытка авторизации )
-                    last_action_time = System.currentTimeMillis();
-                }
-            }).start();
+            Future<Integer> future   = executor.submit(() -> {
+                this.handler( socket, server );
+                return 1;
+            });
+            //new Thread(() -> {
+            //    this.handler( socket, server );
+            //}).start();
         }
         catch ( IOException e ) {
             e.printStackTrace();
@@ -122,6 +99,47 @@ public class ClientHandler {
      */
     public void sendMessage( String msg ) {
         pw.println( msg );
+    }
+
+    /**
+     * handler -
+     */
+    private void handler( Socket socket, Server server ) {
+        // выполняем авторизацию польлзователя
+        this.auth();
+
+        // цикл получения пользовательских сообщений
+        while ( socket.isConnected() ) {
+
+            String s = sc.nextLine();
+            if (s != null && s.equals("/exit")) {
+                server.unsubscribe(this);
+            }
+            // получение личных сообщений
+            else if (s.startsWith("/w")) {
+                // получаем параметры из текстового сообщения и
+                // выполняем проверки авторизации
+                String[] commands = s.split(" ");
+                if (commands.length >= 2) {
+                    String login = commands[1];
+
+                    if (login != null && !login.isEmpty()) {
+                        String msg = "Привет";
+                        server.sendPrivateMessage(login, msg);
+                    }
+                }
+            }
+            // получение общих сообщений
+            else if (s != null && !s.isEmpty()) {
+                server.sendBroadcastMessage(this.name, this.name + " : " + s);
+            } else {
+                String msg = "Что-то пошло не так :(";
+                server.sendPrivateMessage(this.name, msg);
+            }
+            // делаем пометку что пользователь производил
+            // действие ( попытка авторизации )
+            last_action_time = System.currentTimeMillis();
+        }
     }
 
     /**

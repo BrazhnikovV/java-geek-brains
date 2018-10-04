@@ -11,7 +11,7 @@ import java.util.TimerTask;
  * Server - класс реализующий сервер
  *
  * @version 1.0.1
- * @package com.example.jcore.lesson_7.server
+ * @package jprof.lesson_4.server
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */

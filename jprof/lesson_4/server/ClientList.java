@@ -7,7 +7,7 @@ import java.util.List;
  * ClientList - класс представляющий список клиентов с которым работает сервер
  *
  * @version 1.0.1
- * @package com.example.jcore.lesson_7.client
+ * @package jprof.lesson_4.server
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */

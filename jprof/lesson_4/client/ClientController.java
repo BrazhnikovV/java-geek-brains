@@ -9,7 +9,7 @@ import java.util.Scanner;
  * ClientController -
  *
  * @version 1.0.1
- * @package com.example.jcore.lesson_7.client
+ * @package jprof.lesson_4.client
  * @author  Vasya Brazhnikov
  * @copyright Copyright (c) 2018, Vasya Brazhnikov
  */
