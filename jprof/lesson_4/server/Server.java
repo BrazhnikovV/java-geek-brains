@@ -50,6 +50,8 @@ public class Server {
 
     /**
      * constructor
+     *
+     * @param authService
      */
     public Server( IAuthService authService ) {
 
