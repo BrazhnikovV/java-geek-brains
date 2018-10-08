@@ -20,12 +20,6 @@ public class Race {
     private ArrayList<Stage> stages;
 
     /**
-     * getStages -
-     * @return ArrayList<Stage>
-     */
-    public ArrayList<Stage> getStages() { return stages; }
-
-    /**
      * constructor -
      * @param stages -
      * @return void
@@ -33,4 +27,10 @@ public class Race {
     public Race( Stage... stages ) {
         this.stages = new ArrayList<>( Arrays.asList(stages) );
     }
+
+    /**
+     * getStages -
+     * @return ArrayList<Stage>
+     */
+    public ArrayList<Stage> getStages() { return stages; }
 }

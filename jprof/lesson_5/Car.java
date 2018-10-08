@@ -1,5 +1,8 @@
 package jprof.lesson_5;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+
 /**
  * Car - класс
  *
@@ -34,9 +37,51 @@ public class Car implements Runnable {
 
     /**
      *  @access private
+     *  @var int countCarsLimit
+     */
+    private static final int countCarsLimit = 4;
+
+    /**
+     *  @access private
+     *  @var int countCarsIncr
+     */
+    private static int countCarsIncr = 0;
+
+    /**
+     *  @access private
      *  @var String name
      */
     private String name;
+    
+    /**
+     *  @access private
+     *  @var int countCarsLimit
+     */
+    private static CountDownLatch cdlMain;
+
+
+    /**
+     *  @access private
+     *  @var int countCarsLimit
+     */
+    private static CountDownLatch cdlObstacles;
+
+    /**
+     * constructor
+     * @param race
+     * @param speed
+     */
+    public Car( Race race, int speed, CountDownLatch cdlMain, CountDownLatch cdlObstacles ) {
+        this.race  = race;
+        this.speed = speed;
+        this.cdlMain = cdlMain;
+        this.cdlObstacles = cdlObstacles;
+
+        CARS_COUNT++;
+
+
+        this.name = "Участник #" + CARS_COUNT;
+    }
 
     /**
      * getName -
@@ -55,13 +100,19 @@ public class Car implements Runnable {
     }
 
     /**
-     * constructor
+     * getCdl -
+     * @return CountDownLatch
      */
-    public Car( Race race, int speed ) {
-        this.race = race;
-        this.speed = speed;
-        CARS_COUNT++;
-        this.name = "Участник #" + CARS_COUNT;
+    public CountDownLatch getCdl() {
+        return cdlMain;
+    }
+
+    /**
+     * getCountCarsIncr -
+     * @return int
+     */
+    public int getCountCarsIncr () {
+        return this.countCarsIncr;
     }
 
     @Override
@@ -70,10 +121,23 @@ public class Car implements Runnable {
             System.out.println( this.name + " готовится" );
             Thread.sleep(500 + (int)( Math.random() * 800 ) );
             System.out.println( this.name + " готов" );
+
+            this.countCarsIncr++;
+            cdlObstacles.countDown();
+            if ( countCarsLimit == countCarsIncr ) {
+                System.out.println( "ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!" );
+            }
         }
         catch ( Exception e ) {
             e.printStackTrace();
         }
+
+        try {
+            cdlObstacles.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         for ( int i = 0; i < race.getStages().size(); i++ ) {
             race.getStages().get(i).go(this );
