@@ -52,7 +52,7 @@ public class Car implements Runnable {
      *  @var String name
      */
     private String name;
-    
+
     /**
      *  @access private
      *  @var int countCarsLimit
