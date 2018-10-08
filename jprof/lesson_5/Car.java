@@ -4,7 +4,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
 /**
- * Car - класс
+ * Car - класс автомобиль ( участник )
  *
  * @version 1.0.1
  * @package jprof.lesson_5
@@ -68,8 +68,8 @@ public class Car implements Runnable {
 
     /**
      * constructor
-     * @param race
-     * @param speed
+     * @param race - объект трасса
+     * @param speed - скорость участника
      */
     public Car( Race race, int speed, CountDownLatch cdlMain, CountDownLatch cdlObstacles ) {
         this.race  = race;
@@ -79,12 +79,11 @@ public class Car implements Runnable {
 
         CARS_COUNT++;
 
-
         this.name = "Участник #" + CARS_COUNT;
     }
 
     /**
-     * getName -
+     * getName - получить имя участника
      * @return String
      */
     public String getName() {
@@ -92,7 +91,7 @@ public class Car implements Runnable {
     }
 
     /**
-     * getSpeed -
+     * getSpeed - получить скорость участника
      * @return int
      */
     public int getSpeed() {
@@ -100,7 +99,7 @@ public class Car implements Runnable {
     }
 
     /**
-     * getCdl -
+     * getCdl - получить объект CountDownLatch
      * @return CountDownLatch
      */
     public CountDownLatch getCdl() {
@@ -108,7 +107,7 @@ public class Car implements Runnable {
     }
 
     /**
-     * getCountCarsIncr -
+     * getCountCarsIncr - получить значение счетчика добавления участников
      * @return int
      */
     public int getCountCarsIncr () {

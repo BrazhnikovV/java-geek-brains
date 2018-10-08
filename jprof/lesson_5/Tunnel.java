@@ -3,7 +3,7 @@ package jprof.lesson_5;
 import java.util.concurrent.CyclicBarrier;
 
 /**
- * Tunnel - класс
+ * Tunnel - класс тунель ( участок трассы )
  *
  * @version 1.0.1
  * @package jprof.lesson_5
@@ -25,7 +25,7 @@ public class Tunnel extends Stage {
 
         this.length = 80;
         this.description = "Тоннель " + length + " метров";
-        this.cb = new CyclicBarrier(2);
+        this.cb = new CyclicBarrier(2 );
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Tunnel extends Stage {
                 System.out.println( c.getName() + " начал этап: " + description );
                 Thread.sleep(length / c.getSpeed() * 1000 );
             }
-            catch (InterruptedException e) {
+            catch ( InterruptedException e ) {
                 e.printStackTrace();
             }
             finally {
@@ -46,7 +46,7 @@ public class Tunnel extends Stage {
                 c.getCdl().countDown();
             }
         }
-        catch (Exception e) {
+        catch ( Exception e ) {
             e.printStackTrace();
         }
     }

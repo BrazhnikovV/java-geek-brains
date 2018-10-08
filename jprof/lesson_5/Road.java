@@ -1,7 +1,7 @@
 package jprof.lesson_5;
 
 /**
- * Road - класс
+ * Road - класс дорога ( участок трассы )
  *
  * @version 1.0.1
  * @package jprof.lesson_5

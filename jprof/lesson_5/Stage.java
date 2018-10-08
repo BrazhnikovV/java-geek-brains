@@ -1,7 +1,7 @@
 package jprof.lesson_5;
 
 /**
- * Stage - класс
+ * Stage - абстрактный класс участок трассы
  *
  * @version 1.0.1
  * @package jprof.lesson_5
@@ -23,7 +23,7 @@ public abstract class Stage {
     protected String description;
 
     /**
-     * getDescription - точка запуска сервера
+     * getDescription - получить описание прохождения участка
      * @return String
      */
     public String getDescription() {
@@ -31,8 +31,8 @@ public abstract class Stage {
     }
 
     /**
-     * go -
-     * @param c -
+     * go - пройти участок
+     * @param c - объект участника ( машины )
      * @return void
      */
     public abstract void go( Car c );
